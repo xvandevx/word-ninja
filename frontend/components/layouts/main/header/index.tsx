@@ -24,7 +24,7 @@ const links = [
     },
 ];
 
-export default function Header({user}: any) {
+export default function Header({userData}: any) {
     const router = useRouter();
     const dispatch = useDispatch();
     const [isShow, setIsShow] = useState(false);
@@ -42,8 +42,7 @@ export default function Header({user}: any) {
             >
                 <div className={styles.Header}>
                     <div className={styles.Logo}>Word Ninja</div>
-
-                    {user && (
+                    {userData && (
                         <div className={styles.Menu}>
                             {links.map(link => (
                                 <Link href={link.link}><a className={clsx(router.pathname.includes(link.link) && styles.Selected)}>{link.name}</a></Link>
@@ -51,9 +50,9 @@ export default function Header({user}: any) {
                         </div>
                     )}
 
-                    {!!user ? (<div className={styles.User}>
-                        <div className={styles.Avatar}>{user['name'][0]}</div>
-                        <div className={styles.Name}>{user['name']}</div>
+                    {!!userData ? (<div className={styles.User}>
+                        <div className={styles.Avatar}>{userData['email'][0]}</div>
+                        <div className={styles.Name}>{userData['email']}</div>
                     </div>) : (<Button onClick={() => {
                         dispatch(showPopup(popupTypes.auth))
                     }}>Login</Button>)}

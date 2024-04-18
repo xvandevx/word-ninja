@@ -9,18 +9,20 @@ export class CategoryService {
     @InjectModel(Category) private categoryRepository: typeof Category,
   ) {}
 
-  async add(dto: CategoryDto) {
-    await this.categoryRepository.create(dto);
+  async add(dto: CategoryDto, userId: number) {
+    await this.categoryRepository.create({
+      isActive: dto.isActive,
+      name: dto.name,
+      userId
+    });
   }
 
   async update(id: number, dto: CategoryDto) {
     await this.categoryRepository.update(dto, { where: { id } });
   }
 
-  async getAll() {
-    return await this.categoryRepository.findAll({
-      include: { all: true },
-    });
+  async getAll(type) {
+    return await this.categoryRepository.findAll();
   }
 
   async delete(id) {

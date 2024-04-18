@@ -7,8 +7,8 @@ import {
 } from 'sequelize-typescript';
 import {Users} from "../../users/users.model";
 import {TranslationInterface} from "../../../types/words/translation";
-import {WordCategory} from "../category/word-categoy";
 import {Word} from "../word/word.model";
+import {WordTranslation} from "./word-translation";
 
 @Table({ tableName: 'words_translation' })
 export class Translation extends Model<Translation, TranslationInterface> {
@@ -30,6 +30,6 @@ export class Translation extends Model<Translation, TranslationInterface> {
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
 
-  @BelongsToMany(() => Word, () => WordCategory)
+  @BelongsToMany(() => Word, () => WordTranslation)
   words: Word[];
 }

@@ -1,5 +1,6 @@
 import {showPopup} from "./popup";
-import {getWordCategory, getWords} from "./word";
+import { getWords} from "./word";
+import {getWordCategory} from "./category";
 
 export default {
     showPopup,

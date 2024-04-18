@@ -2,9 +2,12 @@ import styles from './index.module.scss'
 import PopupFormWrapper from "~/components/popups/popupFormWrapper";
 import Input from "~/components/common/input";
 import {useEffect, useMemo, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
 import Cookies from 'js-cookie'
+import {getWordCategory} from "~/redux/action-creaters/category";
+import {showPopup} from "~/redux/action-creaters/popup";
+import {popupTypes} from "~/redux/reducers/popupReducer";
 
 const fields = [
     {
@@ -15,56 +18,27 @@ const fields = [
 ];
 
 export default function AddWordCategory({onHide}: any) {
-    const [result, setResult]: any = useState({});
-    const [success, setSuccess] = useState('');
+    const [result, setResult]: any = useState({isActive: true});
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
-    const [resetPasswordEmail, setResertPasswordEmail] = useState('');
+    const dispatch = useDispatch();
 
     const submit = async () => {
         setError('');
 
-        if (resetPasswordEmail) {
-            if (result.password !== result.passwordRepeat) {
-                setError('Passwords does not match');
-                return;
-            }
-            try {
-                await Api.auth.setPassword({
-                    email: resetPasswordEmail,
-                    password: result.password
-                });
-                setResertPasswordEmail('');
-            } catch (e: any) {
-                if (e.message.includes("401")) {
-                    setError('Error');
-                } else {
-                    setError(e.message);
-                }
-            }
-        } else {
-            try {
-                setIsProcessing(true)
-                const data = await Api.auth.login(result);
-                if (data.status === 'setPassword') {
-                    setResertPasswordEmail(result.email)
-                } else if (data.status === 'success') {
-                    Cookies.set('token', data.token, {
-                        path: '/',
-                    });
-                    window.location.href = '/';
-                } else {
-                    setError('Auth failed!');
-                }
-            } catch (e: any) {
-                if (e.message.includes("401")) {
-                    setError('Wrong user name or password');
-                } else {
-                    setError(e.message);
-                }
+        try {
+            await Api.categorys.addWordCategory(result);
+            dispatch(getWordCategory());
+            dispatch(showPopup(popupTypes.none))
+        } catch (e: any) {
+            if (e.message.includes("401")) {
+                setError('Error');
+            } else {
+                setError(e.message);
             }
         }
+
         setIsProcessing(false)
     }
 

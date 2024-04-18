@@ -7,12 +7,9 @@ import {showPopup} from "~/redux/action-creaters/popup";
 import {popupTypes} from "~/redux/reducers/popupReducer";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
-import {getWordCategory, getWords} from "~/redux/action-creaters/word";
-
-const categorys = [
-    'kitchen',
-    'car'
-]
+import {getWords} from "~/redux/action-creaters/word";
+import serverHandler from "~/pages/serverHandler";
+import {getWordCategory} from "~/redux/action-creaters/category";
 
 const words = [
     {
@@ -25,7 +22,7 @@ const words = [
     },
 ]
 
-export default function Words({user}: any) {
+export default function Words({userData}: any) {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,8 +31,8 @@ export default function Words({user}: any) {
     }, []);
 
     return (
-        <MainLayout user={user}>
-            <Side side={<Categories items={categorys}/>}>
+        <MainLayout userData={userData}>
+            <Side side={<Categories/>}>
                 <Table items={words}/>
             </Side>
             <Panel links={[
@@ -56,14 +53,6 @@ export default function Words({user}: any) {
     )
 }
 
-export const getServerSideProps = () => {
-    console.log('testset')
-    return {
-        props: {
-            user: {
-                id: 1,
-                name: 'Ivan'
-            }
-        }
-    }
+export const getServerSideProps = async (ctx: any) => {
+    return await serverHandler(ctx)
 }

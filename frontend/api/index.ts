@@ -1,11 +1,12 @@
 import axios from "axios";
 import words from './words'
-import sentenses from "./sentenses";
+import sentences from "./sentences";
 import users from "~/api/users";
 import auth from "~/api/auth";
 import Cookies from "js-cookie";
+import categorys from "~/api/categorys";
 
-let API_URL = '/api';
+let API_URL = 'http://localhost:3010/api';
 
 const config = {
     API_URL,
@@ -17,5 +18,6 @@ export const Api = {
     users: users(axios, config),
     auth: auth(axios, config),
     words: words(axios, config),
-    sentenses: sentenses(axios, config),
+    sentences: sentences(axios, config),
+    categorys: categorys(axios, config)
 }

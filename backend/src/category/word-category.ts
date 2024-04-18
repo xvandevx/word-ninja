@@ -5,10 +5,10 @@ import {
     DataType,
     ForeignKey,
 } from 'sequelize-typescript';
+import {Word} from "../words/word/word.model";
 import {Category} from "./category.model";
-import {Sentence} from "../sentense/sentence.model";
-@Table({ tableName: 'sentences_sentence_category', createdAt: false, updatedAt: false })
-export class SentenceCategory extends Model<SentenceCategory> {
+@Table({ tableName: 'word_category', createdAt: false, updatedAt: false })
+export class WordCategory extends Model<WordCategory> {
     @Column({
         type: DataType.INTEGER,
         unique: true,
@@ -17,9 +17,9 @@ export class SentenceCategory extends Model<SentenceCategory> {
     })
     id: number;
 
-    @ForeignKey(() => Sentence)
+    @ForeignKey(() => Word)
     @Column({ type: DataType.INTEGER })
-    sentenceId: number;
+    wordId: number;
 
     @ForeignKey(() => Category)
     @Column({ type: DataType.INTEGER })

@@ -9,5 +9,7 @@ export class SentenceDto implements SentenceInterface {
   @ApiProperty()
   readonly translation: string;
   @ApiProperty()
+  readonly comment: string;
+  @ApiProperty()
   readonly userId: number;
 }

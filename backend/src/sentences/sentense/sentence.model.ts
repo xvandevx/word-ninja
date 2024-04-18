@@ -8,8 +8,8 @@ import {
 import {SentenceInterface} from "../../../types/sentences/sentence";
 import {Users} from "../../users/users.model";
 
-import {SentenceCategory} from "../category/sentence-categoy";
-import {Category} from "../category/category.model";
+import {SentenceCategory} from "../../category/sentence-category";
+import {Category} from "../../category/category.model";
 
 @Table({ tableName: 'sentences_sentence' })
 export class Sentence extends Model<Sentence, SentenceInterface> {
@@ -29,6 +29,9 @@ export class Sentence extends Model<Sentence, SentenceInterface> {
 
   @Column({ type: DataType.STRING })
   translation: string;
+
+  @Column({ type: DataType.STRING })
+  comment: string;
 
   @ForeignKey(() => Users)
   @Column({ type: DataType.INTEGER, allowNull: false })

@@ -1,11 +1,16 @@
 import styles from './index.module.scss'
 import MainLayout from "~/components/layouts/main";
 import {useEffect, useState} from "react";
+import {useRouter} from "next/router";
+import serverHandler from "~/pages/serverHandler";
 
-export default function Home({user}: any) {
+export default function Home({userData}: any) {
     const [mainText, setMainText] = useState('_');
 
+    const router = useRouter();
+
     useEffect(() => {
+        console.log(router);
         init();
     }, []);
 
@@ -28,7 +33,7 @@ export default function Home({user}: any) {
     };
 
     return (
-        <MainLayout user={user}>
+        <MainLayout userData={userData}>
             <div className={styles.MainText}>
                 {mainText}
             </div>
@@ -36,15 +41,8 @@ export default function Home({user}: any) {
     )
 }
 
-export const getServerSideProps = () => {
-    return {
-        props: {
-            user: {
-                id: 1,
-                name: 'Ivan'
-            }
-        }
-    }
+export const getServerSideProps = async (ctx: any) => {
+    return await serverHandler(ctx)
 }
 
 export async function writeText(text: string, setText: (text: string) => {}) {

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {CategoryInterface} from "../../../../types/words/categorys";
+import {CategoryInterface} from "../../../types/categorys";
 
 export class CategoryDto implements CategoryInterface {
   @ApiProperty()
@@ -8,4 +8,6 @@ export class CategoryDto implements CategoryInterface {
   readonly name: string;
   @ApiProperty()
   readonly userId: number;
+  @ApiProperty()
+  readonly type: number;
 }

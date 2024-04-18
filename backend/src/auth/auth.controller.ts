@@ -23,10 +23,11 @@ export class AuthController {
   }
 
   @Post('check')
-  async checkIsAuth() {
+  async checkIsAuth(@Request() req) {
     return {
       statusCode: 200,
       message: 'Authorized',
+      user: req.user
     };
   }
 

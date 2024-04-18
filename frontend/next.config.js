@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig =  {
-    experimental: {
-        externalDir: true,
-    },
-};
 
-module.exports = nextConfig
+module.exports = () => {
+
+    return {
+        trailingSlash: true,
+    };
+};

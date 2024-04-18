@@ -5,12 +5,14 @@ import {
   DataType,
   ForeignKey, BelongsToMany,
 } from 'sequelize-typescript';
-import {CategoryInterface} from "../../../types/words/categorys";
-import {Users} from "../../users/users.model";
-import {Word} from "../word/word.model";
-import {WordCategory} from "./word-categoy";
+import {CategoryInterface} from "../../types/categorys";
+import {Users} from "../users/users.model";
+import {Word} from "../words/word/word.model";
+import {WordCategory} from "./word-category";
+import {SentenceCategory} from "./sentence-category";
+import {Sentence} from "../sentences/sentense/sentence.model";
 
-@Table({ tableName: 'words_category' })
+@Table({ tableName: 'category' })
 export class Category extends Model<Category, CategoryInterface> {
   @Column({
     type: DataType.INTEGER,
@@ -32,4 +34,7 @@ export class Category extends Model<Category, CategoryInterface> {
 
   @BelongsToMany(() => Word, () => WordCategory)
   words: Word[];
+
+  @BelongsToMany(() => Sentence, () => SentenceCategory)
+  sentences: Sentence[];
 }

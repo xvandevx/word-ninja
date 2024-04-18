@@ -28,6 +28,7 @@ export class WordController {
 
   @Get()
   getAll() {
+    console.log('testset')
     return this.wordService.getAll();
   }
 

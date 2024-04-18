@@ -6,13 +6,15 @@ import {SequelizeModule} from "@nestjs/sequelize";
 import {Users} from "./users/users.model";
 import {AuthModule} from "./auth/auth.module";
 import {Word} from "./words/word/word.model";
-import {WordCategory} from "./words/category/word-categoy";
+import {WordCategory} from "./category/word-category";
 import {WordTranslation} from "./words/translation/word-translation";
 import {WordModule} from "./words/word/word.module";
 import {WordTranslationModule} from "./words/translation/translation.module";
-import {WordCategoryModule} from "./words/category/category.module";
+import {CategoryModule} from "./category/category.module";
 import {Translation} from "./words/translation/translation.model";
-import {Category} from "./words/category/category.model";
+import {Category} from "./category/category.model";
+import {SentenceCategory} from "./category/sentence-category";
+import {Sentence} from "./sentences/sentense/sentence.model";
 
 @Module({
   imports: [
@@ -31,7 +33,9 @@ import {Category} from "./words/category/category.model";
         WordTranslation,
         Translation,
         WordCategory,
+        SentenceCategory,
         Category,
+        Sentence,
         Word,
       ],
       autoLoadModels: true,
@@ -40,7 +44,7 @@ import {Category} from "./words/category/category.model";
     }),
     AuthModule,
     WordModule,
-    WordCategoryModule,
+    CategoryModule,
     WordTranslationModule
   ],
   controllers: [],

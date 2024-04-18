@@ -1,0 +1,41 @@
+.Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.Logo {
+    font-size: 20px;
+}
+
+.User {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.Menu {
+    display: flex;
+    gap: 15px;
+    a {
+        padding: 10px 15px;
+        border-radius: 15px;
+        background-color: #3d3b3b;
+        color: #fff;
+    }
+}
+
+.Selected {
+    background-color: #1247a5!important;
+}
+
+.Avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #b86565;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

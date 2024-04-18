@@ -1,0 +1,90 @@
+.Wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity .15s linear;
+  background-color: #000c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  animation-duration: .3s;
+  padding: 20px;
+}
+
+
+.Popup {
+  padding: 50px 60px;
+  background-color: #222222;
+  min-width: 500px;
+  min-height: 200px;
+  border-radius: 20px;
+  animation-name: zoomIn;
+  animation-duration: .3s;
+  animation-fill-mode: both;
+  max-height: 100%;
+  overflow: auto;
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        -webkit-transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+50% {
+        opacity: 1;
+    }
+}
+
+.Close {
+  position: absolute;
+  right: -30px;
+  cursor: pointer;
+  top: -20px;
+  transition: 0.3s;
+  @media (hover: hover) and (pointer: fine) {
+      &:hover {
+          scale: 1.5;
+      }
+  }
+}
+
+.Content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+@media only screen and (max-width: 768px) {
+    .Popup {
+        padding: 30px;
+    }
+    .Close {
+        right: -15px;
+        top: -15px;
+    }
+}
+
+
+@media only screen and (max-width: 520px) {
+    .Popup {
+        min-width: inherit;
+        width: 100%;
+        padding: 20px;
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    }
+    .Close {
+        right: -10px;
+        top: -10px;
+    }
+}

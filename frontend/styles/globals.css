@@ -1,0 +1,181 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Golos Text', sans-serif;
+  color: #111634;
+  min-width: 375px;
+  font-size: 16px;
+  background-color: #222222;
+  color: #fff;
+}
+
+body.popup, body.slider, body.unscroll {
+  overflow: hidden;
+}
+
+.popup #productImages {
+  position: initial;
+}
+
+body.slider #productImages {
+  z-index: 30;
+}
+
+a {
+  color: #1247a5;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  line-height: 2em;
+  margin: 0 0 10px;
+}
+
+.container {
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+
+}
+
+@media (max-width: 1350px) {
+  .container {
+    max-width: calc(100% - 50px);
+  }
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+h1 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 0 0 22px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.info {
+  color: #999;
+  font-size: 14px;
+}
+
+select {
+  padding: 12px 20px;
+  border-radius: 4px;
+  border: 1px solid #D8D8D8;
+  font-size: 16px!important;
+  appearance: none;
+  background-position: right 20px center;
+  background-repeat: no-repeat;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI0IiB2aWV3Qm94PSIwIDAgNiA0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0zIDRMMCAwSDZMMyA0WiIgZmlsbD0iIzkzOTc5QiIvPjwvc3ZnPg==)
+}
+
+.text {
+  line-height: 2em;
+}
+
+.text iframe {
+  max-width: 100%;
+}
+
+.text h1 {
+  margin: 0 0 22px;
+  font-size: 22px!important
+}
+
+.text h2 {
+  margin: 0 0 20px;
+  font-size: 20px!important
+}
+
+.text h3 {
+  margin: 0 0 18px;
+  font-size: 18px!important
+}
+
+.text ul {
+  list-style: disc;
+  padding: 0 15px;
+  margin: 10px 0 20px;
+}
+
+.text img {
+  border-radius: 8px;
+}
+
+.track {
+  top: 10px;
+  height: 4px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: #d5d7e6;
+}
+
+.track-1 {
+  background-color: #1247a5;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    max-width: calc(100% - 20px);
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    margin: 0 0 15px;
+    font-size: 22px;
+  }
+}
+
+#react-select-3-placeholder {
+  font-size: 15px;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  top: 30px!important;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-20%);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: opacity 500ms ease, transform 500ms ease;
+}

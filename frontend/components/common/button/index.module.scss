@@ -1,0 +1,115 @@
+.Button {
+  padding: 10px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-height: 100%;
+  justify-content: center;
+  font-size: 15px;
+  transition: 0.3s;
+  position: relative;
+  text-align: center;
+}
+
+.Default {
+    background: #1247a5;
+    color: #fff;
+    border: 1px solid #1247a5;
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #033DD5;
+            border-color: #033DD5;
+        }
+    }
+    &:active{
+        background-color: #0634B0;
+        border-color: #0634B0
+    }
+}
+
+.Black {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #333;
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #000;
+            border-color: #000;
+        }
+    }
+    &:active{
+        background-color: #686868;
+        border-color: #686868
+    }
+}
+
+.BlackSelected {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #333;
+}
+
+.Outline {
+  background: #fff0;
+  color: #1247a5;
+  border: 1px solid #1247a5;
+  .Loader {
+    fill: #1247a5;
+  }
+  @media (hover: hover) and (pointer: fine) {
+      &:hover {
+          background-color: #033DD5;
+          border-color: #033DD5;
+          color: #fff;
+          .Loader {
+            fill: #fff;
+          }
+      }
+  }
+    &:active{
+        background-color: #0634B0;
+        border-color: #0634B0
+    }
+}
+
+.OutlineGray {
+    color: #1247a5;
+    border: 1px solid #D5D7E6;
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            border-color: #033DD5;
+        }
+    }
+    &:active{
+        border-color: #0634B0
+    }
+}
+
+.OutlineWhite {
+    background: #fff0;
+    color: #fff;
+    border: 1px solid #fff;
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #033DD5;
+            border-color: #033DD5;
+        }
+    }
+    &:active{
+        background-color: #0634B0;
+        border-color: #0634B0
+    }
+}
+
+.Disabled {
+    background-color: #D8D8D8;
+    color: #fff;
+    border-color: #D8D8D8;
+    pointer-events: none;
+}
+
+.Loader {
+    fill: #fff;
+}

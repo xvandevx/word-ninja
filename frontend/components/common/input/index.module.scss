@@ -1,0 +1,58 @@
+.Input {
+  display: flex;
+  flex-direction: column;
+
+
+  label {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #9294A9;
+  }
+
+  > div {
+    input, div, textarea {
+      border: 1px solid #3d3b3b;
+      font-size: 16px;
+      width: 100%;
+      padding: 15px 15px;
+      border-radius: 15px;
+      background-color: #3d3b3b;
+      color: #fff;
+    }
+  }
+}
+
+.Disabled {
+  opacity: 0.5;
+  cursor: inherit;
+  pointer-events: none;
+}
+
+.Error {
+  color: red;
+  font-size: 13px;
+  input {
+    border: 1px solid red;
+  }
+}
+
+.After {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #9294A9;
+}
+
+.Right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Content {
+  position: relative;
+}

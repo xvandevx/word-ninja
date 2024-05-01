@@ -7,8 +7,6 @@ import {
 } from 'sequelize-typescript';
 import {WordInterface} from "../../../types/words/word";
 import {Users} from "../../users/users.model";
-import {Translation} from "../translation/translation.model";
-import {WordTranslation} from "../translation/word-translation";
 import {Category} from "../../category/category.model";
 import {WordCategory} from "../../category/word-category";
 
@@ -29,14 +27,26 @@ export class Word extends Model<Word, WordInterface> {
   word: string;
 
   @Column({ type: DataType.STRING })
+  translation: string;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  pluses: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  minuses: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  status: number;
+
+  @Column({ type: DataType.STRING })
+  lastStatusDate: string;
+
+  @Column({ type: DataType.STRING })
   comment: string;
 
   @ForeignKey(() => Users)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
-
-  @BelongsToMany(() => Translation, () => WordTranslation)
-  translations: Translation[];
 
   @BelongsToMany(() => Category, () => WordCategory)
   categorys: Category[];

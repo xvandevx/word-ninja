@@ -7,9 +7,7 @@ export default async (ctx: any, props = {}) => {
 
     if (token) {
         try {
-            const apiPath = process.env.PROTOCOL + '://' + ctx.req.headers.host.replace(':3000', '') + ":" + (process.env.PORT || 80);
-            console.log('apiPath', apiPath)
-            const res = await fetch(apiPath + "/api/auth/check", {
+            const res = await fetch(process.env.API_HOST + "/api/auth/check", {
                 method: "POST",
                 headers: {
                     authorization: `Bearer ${token}`

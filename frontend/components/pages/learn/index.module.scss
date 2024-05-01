@@ -1,0 +1,26 @@
+.Panel {
+  background-color: #27272a;
+  padding: 5px;
+  border-radius: 14px;
+  display: flex;
+  gap: 5px;
+  margin: auto;
+}
+
+.Learn {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  gap: 20px
+}
+
+.PanelWrapper {
+  left: 0;
+  width: 100%;
+  position: fixed;
+  bottom: 50px;
+  display: flex;
+}

@@ -2,7 +2,9 @@ export const popupTypes = {
     none: 'none',
     auth: 'auth',
     addWord: 'addWord',
-    addWordCategory: 'addWordCategory',
+    addWords: 'addWords',
+    addCategory: 'addCategory',
+    addSentence: 'addSentence',
 }
 
 

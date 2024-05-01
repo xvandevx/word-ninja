@@ -4,10 +4,10 @@ import { WordService } from './word.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import {Users} from "../../users/users.model";
 import {Word} from "./word.model";
-import {WordTranslation} from "../translation/word-translation";
+import {Category} from "../../category/category.model";
 
 @Module({
-  imports: [SequelizeModule.forFeature([Word, WordTranslation, Users])],
+  imports: [SequelizeModule.forFeature([Word, Category, Users])],
   controllers: [WordController],
   providers: [WordService],
   exports: [WordService],

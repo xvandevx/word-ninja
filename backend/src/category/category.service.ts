@@ -11,18 +11,25 @@ export class CategoryService {
 
   async add(dto: CategoryDto, userId: number) {
     await this.categoryRepository.create({
-      isActive: dto.isActive,
+      isActive: true,
       name: dto.name,
+      type: dto.type,
       userId
     });
   }
 
   async update(id: number, dto: CategoryDto) {
-    await this.categoryRepository.update(dto, { where: { id } });
+    await this.categoryRepository.update({
+      name: dto.name,
+      type: dto.type,
+    }, { where: { id } });
   }
 
-  async getAll(type) {
-    return await this.categoryRepository.findAll();
+  async getAll(userId) {
+    return await this.categoryRepository.findAll({
+      where: { userId },
+      order: [['id', 'ASC']],
+    });
   }
 
   async delete(id) {

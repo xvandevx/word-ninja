@@ -7,6 +7,16 @@ export class WordDto implements WordInterface {
   @ApiProperty()
   readonly word: string;
   @ApiProperty()
+  readonly translation: string;
+  @ApiProperty()
+  readonly pluses: number;
+  @ApiProperty()
+  readonly minuses: number;
+  @ApiProperty()
+  readonly status: number;
+  @ApiProperty()
+  readonly lastStatusDate: string;
+  @ApiProperty()
   readonly comment: string;
   @ApiProperty()
   readonly userId: number;

@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, Request,
 } from '@nestjs/common';
 import { WordService } from './word.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -17,23 +17,42 @@ export class WordController {
   constructor(private readonly wordService: WordService) {}
 
   @Post()
-  create(@Body() wordDto: WordDto) {
-    return this.wordService.add(wordDto);
+  async create(@Body() wordDto: WordDto, @Request() req: any) {
+    await this.wordService.add(wordDto, req?.user?.id);
+  }
+
+  @Post('/minus/:id')
+  async setMinus(@Param('id') id: number, @Request() req: any) {
+    await this.wordService.setMinus(id, req?.user?.id);
+  }
+
+  @Post('/plus/:id')
+  async setPlus(@Param('id') id: number, @Request() req: any) {
+    await this.wordService.setPlus(id, req?.user?.id);
+  }
+
+  @Post('/setStatus/:id')
+  async setStatus(@Param('id') id: number, @Body() wordDto: any, @Request() req: any) {
+    await this.wordService.setStatus(id, wordDto, req?.user?.id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() wordDto: WordDto) {
-    return this.wordService.update(id, wordDto);
+  async update(@Param('id') id: number, @Body() wordDto: WordDto, @Request() req: any) {
+    await this.wordService.update(id, wordDto, req?.user?.id);
+  }
+
+  @Get(':id')
+  getById(@Param('id') id: number, @Request() req: any) {
+    return this.wordService.getById(id, req?.user?.id);
   }
 
   @Get()
-  getAll() {
-    console.log('testset')
-    return this.wordService.getAll();
+  getAll(@Request() req: any) {
+    return this.wordService.getAll(req?.user?.id);
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: number) {
-    return this.wordService.delete(id);
+  async delete(@Param('id') id: number, @Request() req: any) {
+    await this.wordService.delete(id, req?.user?.id);
   }
 }

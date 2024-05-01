@@ -16,15 +16,9 @@ import { CategoryDto } from './dto/category.dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Post('/word')
+  @Post()
   createWord(@Body() commentsDto: CategoryDto, @Request() req: any) {
-    console.log('testset', req.user?.id)
     return this.categoryService.add(commentsDto, req?.user?.id);
-  }
-
-  @Post('/sentence')
-  createSentence(@Body() commentsDto: CategoryDto, @Request() req: any) {
-    return this.categoryService.add(commentsDto, req.user?.id);
   }
 
   @Put(':id')
@@ -32,14 +26,9 @@ export class CategoryController {
     return this.categoryService.update(id, categoryDto);
   }
 
-  @Get('/word')
-  getAllWord() {
-    return this.categoryService.getAll(1);
-  }
-
-  @Get('/sentence')
-  getAllSentence() {
-    return this.categoryService.getAll(2);
+  @Get()
+  getAllWord(@Request() req: any) {
+    return this.categoryService.getAll(req.user?.id);
   }
 
   @Delete('/:id')

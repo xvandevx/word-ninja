@@ -15,6 +15,7 @@ import {Translation} from "./words/translation/translation.model";
 import {Category} from "./category/category.model";
 import {SentenceCategory} from "./category/sentence-category";
 import {Sentence} from "./sentences/sentense/sentence.model";
+import {SentenceModule} from "./sentences/sentense/sentence.module";
 
 @Module({
   imports: [
@@ -30,13 +31,11 @@ import {Sentence} from "./sentences/sentense/sentence.model";
       database: process.env.POSTGRES_DB,
       models: [
         Users,
-        WordTranslation,
-        Translation,
+        Sentence,
+        Word,
         WordCategory,
         SentenceCategory,
         Category,
-        Sentence,
-        Word,
       ],
       autoLoadModels: true,
       logging: false,
@@ -45,7 +44,7 @@ import {Sentence} from "./sentences/sentense/sentence.model";
     AuthModule,
     WordModule,
     CategoryModule,
-    WordTranslationModule
+    SentenceModule
   ],
   controllers: [],
   providers: [

@@ -1,21 +1,26 @@
 import MainLayout from "~/components/layouts/main";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import serverHandler from "~/pages/serverHandler";
+import {getLearnedWords, getLearningWords} from "~/redux/action-creaters/learn";
+import LearnComponent from "~/components/pages/learn";
 
-export default function Learn({user}: any) {
+
+export default function Sentences({userData}: any) {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getLearningWords());
+        dispatch(getLearnedWords());
+    }, []);
+
     return (
-        <MainLayout user={user}>
-            Sentences
+        <MainLayout userData={userData}>
+            <LearnComponent/>
         </MainLayout>
     )
 }
 
-export const getServerSideProps = () => {
-    console.log('testset')
-    return {
-        props: {
-            user: {
-                id: 1,
-                name: 'Ivan'
-            }
-        }
-    }
+export const getServerSideProps = async (ctx: any) => {
+    return await serverHandler(ctx)
 }

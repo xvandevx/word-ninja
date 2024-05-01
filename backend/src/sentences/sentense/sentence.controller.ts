@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, Request,
 } from '@nestjs/common';
 import { SentenceService } from './sentence.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -17,22 +17,22 @@ export class SentenceController {
   constructor(private readonly sentenceService: SentenceService) {}
 
   @Post()
-  create(@Body() sentenceDto: SentenceDto) {
-    return this.sentenceService.add(sentenceDto);
+  async create(@Body() sentenceDto: SentenceDto, @Request() req: any) {
+    return await this.sentenceService.add(sentenceDto, req?.user?.id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() sentenceDto: SentenceDto) {
-    return this.sentenceService.update(id, sentenceDto);
+  async update(@Param('id') id: number, @Body() sentenceDto: SentenceDto, @Request() req: any) {
+    return await this.sentenceService.update(id, sentenceDto, req?.user?.id);
   }
 
   @Get()
-  getAll() {
-    return this.sentenceService.getAll();
+  async getAll(@Request() req: any) {
+    return await this.sentenceService.getAll(req?.user?.id);
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: number) {
-    return this.sentenceService.delete(id);
+  async delete(@Param('id') id: number, @Request() req: any) {
+    return await this.sentenceService.delete(id, req?.user?.id);
   }
 }

@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import styles from './index.module.scss'
-import {CSSTransition, Transition} from 'react-transition-group';
+import {CSSTransition} from 'react-transition-group';
 import {useRouter} from "next/router";
-import Button from "~/components/common/button";
 import {showPopup} from "~/redux/action-creaters/popup";
 import {popupTypes} from "~/redux/reducers/popupReducer";
-import {useDispatch} from "react-redux";
-import Link from "next/link";
-import clsx from "clsx";
+import {useDispatch, useSelector} from "react-redux";
+import {ThemeSwitch} from "~/components/theme-switch";
+import {Avatar, Button, User} from "@nextui-org/react";
 
 const links = [
     {
@@ -31,12 +30,13 @@ export default function Header({userData}: any) {
     useEffect(() => {
         setIsShow(true);
     }, []);
+    const {learningWordIds, learnedWordIds} = useSelector((state: any) => state.learn)
 
     return (
         <header className='container'>
             <CSSTransition
                 in={isShow}
-                timeout={1000}
+                timeout={500}
                 classNames="fade"
                 unmountOnExit
             >
@@ -45,17 +45,19 @@ export default function Header({userData}: any) {
                     {userData && (
                         <div className={styles.Menu}>
                             {links.map(link => (
-                                <Link href={link.link}><a className={clsx(router.pathname.includes(link.link) && styles.Selected)}>{link.name}</a></Link>
+                                <Button color={router.pathname.includes(link.link) ? 'secondary' : 'default'} onClick={() => {
+                                    router.push(link.link);
+                                }}>{link.name} {link.link.includes('learn') && `(${learningWordIds.length})`}</Button>
                             ))}
                         </div>
                     )}
 
-                    {!!userData ? (<div className={styles.User}>
-                        <div className={styles.Avatar}>{userData['email'][0]}</div>
-                        <div className={styles.Name}>{userData['email']}</div>
-                    </div>) : (<Button onClick={() => {
-                        dispatch(showPopup(popupTypes.auth))
-                    }}>Login</Button>)}
+                    <div className='flex gap-4'>
+                        <ThemeSwitch />
+                        {!!userData ? (<User name={userData['email']} avatarProps={{fallback: <Avatar showFallback src='https://images.unsplash.com/broken' />}}/>) : (<Button onClick={() => {
+                            dispatch(showPopup(popupTypes.auth))
+                        }}>Login</Button>)}
+                    </div>
                 </div>
             </CSSTransition>
         </header>

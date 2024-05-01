@@ -28,6 +28,9 @@ export class Category extends Model<Category, CategoryInterface> {
   @Column({ type: DataType.STRING, allowNull: false })
   name: string;
 
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  type: number;
+
   @ForeignKey(() => Users)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;

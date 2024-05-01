@@ -1,10 +1,11 @@
 import styles from './index.module.scss'
 import PopupFormWrapper from "~/components/popups/popupFormWrapper";
-import Input from "~/components/common/input";
+import {Input} from "@nextui-org/react";
 import {useEffect, useMemo, useState} from "react";
 import {useSelector} from "react-redux";
 import {Api} from "~/api";
 import Cookies from 'js-cookie'
+import {EyeFilledIcon, EyeSlashFilledIcon} from "@nextui-org/shared-icons";
 
 const authFields = [
     {
@@ -97,6 +98,10 @@ export default function AuthPopup({onHide}: any) {
         setIsProcessing(false)
     }
 
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleVisibility = () => setIsVisible(!isVisible);
+
     return (
         <PopupFormWrapper
             title={title}
@@ -105,14 +110,24 @@ export default function AuthPopup({onHide}: any) {
             onSubmit={submit}
             errorText={error}
         >
-            {fields.map(({name, code, required}: any) => (
-                <Input
-                    key={name}
-                    label={name}
-                    required={required}
-                    onChange={(value: any) => setResult({...result, [code]: value})}
-                />
-            ))}
+            <Input
+                label="Email"
+                onValueChange={(value: any) => setResult({...result, 'email': value})}
+            />
+            <Input
+                label="Password"
+                endContent={
+                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                        {isVisible ? (
+                            <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                            <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                    </button>
+                }
+                type={isVisible ? "text" : "password"}
+                onValueChange={(value: any) => setResult({...result, 'password': value})}
+            />
         </PopupFormWrapper>
     )
 }

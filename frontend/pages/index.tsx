@@ -1,17 +1,17 @@
 import styles from './index.module.scss'
 import MainLayout from "~/components/layouts/main";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
+import {useEffect, useRef, useState} from "react";
 import serverHandler from "~/pages/serverHandler";
 
 export default function Home({userData}: any) {
     const [mainText, setMainText] = useState('_');
-
-    const router = useRouter();
+    const dataFetch: any = useRef({ rendered: false})
 
     useEffect(() => {
-        console.log(router);
-        init();
+        if (!dataFetch.rendered) {
+            init();
+            dataFetch.rendered = true
+        }
     }, []);
 
     const init = async () => {
@@ -42,12 +42,21 @@ export default function Home({userData}: any) {
 }
 
 export const getServerSideProps = async (ctx: any) => {
-    return await serverHandler(ctx)
+    const data = await serverHandler(ctx);
+    if (data.props.userData?.id) {
+        return {
+            redirect: {
+                destination: '/words',
+            },
+        }
+    }
+    return data
 }
 
 export async function writeText(text: string, setText: (text: string) => {}) {
     let resText = '_';
     setText(resText);
+    console.log('test', text)
     for (let i = 0; i < text.length; i++) {
         await sleep(getRandomArbitrary(20,80));
         resText = resText.substr(0, resText.length - 1);

@@ -4,9 +4,10 @@ import {popupTypes} from "~/redux/reducers/popupReducer";
 import Auth from './auth'
 import {showPopup} from "~/redux/action-creaters/popup";
 import {useEffect} from "react";
-import { AiOutlineClose } from "react-icons/ai";
 import AddWord from "~/components/popups/addWord";
-import AddWordCategory from "~/components/popups/addWordCategory";
+import AddWords from "~/components/popups/addWords";
+import AddSentence from "~/components/popups/addSentence";
+import AddCategory from "~/components/popups/addCategory";
 
 export default function Popups() {
     const {visibleType} = useSelector((state: any) => state.popup)
@@ -31,15 +32,21 @@ export default function Popups() {
         <noindex><div className={styles.Wrapper} onClick={onHide}>
             <div className={styles.Popup} onClick={e => e.stopPropagation()}>
                 <div className={styles.Content}>
-                    <span className={styles.Close} onClick={onHide}><AiOutlineClose /></span>
+                    <span className={styles.Close} onClick={onHide}></span>
                     {visibleType === popupTypes.auth && (
                         <Auth onHide={onHide}/>
                     )}
                     {visibleType === popupTypes.addWord && (
                         <AddWord onHide={onHide}/>
                     )}
-                    {visibleType === popupTypes.addWordCategory && (
-                        <AddWordCategory onHide={onHide}/>
+                    {visibleType === popupTypes.addWords && (
+                        <AddWords onHide={onHide}/>
+                    )}
+                    {visibleType === popupTypes.addCategory && (
+                        <AddCategory onHide={onHide}/>
+                    )}
+                    {visibleType === popupTypes.addSentence && (
+                        <AddSentence onHide={onHide}/>
                     )}
                 </div>
             </div>

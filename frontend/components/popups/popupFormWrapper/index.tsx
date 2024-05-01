@@ -11,12 +11,13 @@ export default function PopupFormWrapper({
     isLoading = false,
     onSubmit = () => {},
     errorText = '',
-    children = any,
+    children,
     topText = ''
-}) {
+}: any) {
     const dispatch = useDispatch();
 
     const onHide = () => {
+        // @ts-ignore
         dispatch(showPopup(popupTypes.none))
     }
 

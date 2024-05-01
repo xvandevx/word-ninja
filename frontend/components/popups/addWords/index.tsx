@@ -37,7 +37,9 @@ export default function AddWords({onHide}: any) {
                 });
             }
 
+            // @ts-ignore
             await dispatch(getWords());
+            // @ts-ignore
             await dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {
@@ -69,7 +71,7 @@ export default function AddWords({onHide}: any) {
                     selectionMode="multiple"
                     onSelectionChange={(value: any) => setResult({...result, 'categorys': [...value]})}
                 >
-                    {wordCategorys.map((item) => (
+                    {wordCategorys.map((item: any) => (
                         <SelectItem key={item.id} value={item.id}>
                             {item.name}
                         </SelectItem>
@@ -82,7 +84,10 @@ export default function AddWords({onHide}: any) {
                 >
                     {Object.keys(WordStatusNames).map((status) => (
                         <SelectItem key={status} value={status}>
-                            {WordStatusNames[status]}
+                            {
+                                //@ts-ignore
+                                WordStatusNames[status]
+                            }
                         </SelectItem>
                     ))}
                 </Select>

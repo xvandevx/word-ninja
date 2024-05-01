@@ -10,6 +10,7 @@ import {
 import { WordService } from './word.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { WordDto } from './dto/word.dto';
+import {Public} from "../../common";
 
 @ApiBearerAuth()
 @Controller('words/word')

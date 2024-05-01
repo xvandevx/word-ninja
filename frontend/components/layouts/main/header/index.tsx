@@ -41,11 +41,13 @@ export default function Header({userData}: any) {
                 unmountOnExit
             >
                 <div className={styles.Header}>
-                    <div className={styles.Logo}>Word Ninja</div>
+                    <a className={styles.Logo} href={'/'}>
+                        <span>WORD</span><img src='/ninja.svg'/><span>NINJA</span>
+                    </a>
                     {userData && (
                         <div className={styles.Menu}>
                             {links.map(link => (
-                                <Button color={router.pathname.includes(link.link) ? 'secondary' : 'default'} onClick={() => {
+                                <Button key={link.link} color={router.pathname.includes(link.link) ? 'secondary' : 'default'} onClick={() => {
                                     router.push(link.link);
                                 }}>{link.name} {link.link.includes('learn') && `(${learningWordIds.length})`}</Button>
                             ))}
@@ -54,9 +56,19 @@ export default function Header({userData}: any) {
 
                     <div className='flex gap-4'>
                         <ThemeSwitch />
-                        {!!userData ? (<User name={userData['email']} avatarProps={{fallback: <Avatar showFallback src='https://images.unsplash.com/broken' />}}/>) : (<Button onClick={() => {
-                            dispatch(showPopup(popupTypes.auth))
-                        }}>Login</Button>)}
+                        {!!userData ? (<User
+                            name={userData['name']}
+                            avatarProps={{
+                                fallback: <Avatar showFallback src='https://images.unsplash.com/broken' />,
+                                src: userData.picture
+                            }}/>
+                        ) : (
+                            <Button onClick={() => {
+                                    window.location.href = '/api/auth/google'
+                                    //dispatch(showPopup(popupTypes.auth))
+                                }}
+                            >Login</Button>
+                        )}
                     </div>
                 </div>
             </CSSTransition>

@@ -2,7 +2,7 @@ import MainLayout from "~/components/layouts/main";
 import {useDispatch} from "react-redux";
 import {useEffect, useRef, useState} from "react";
 import {getWords} from "~/redux/action-creaters/word";
-import serverHandler from "~/pages/serverHandler";
+import serverHandler from "~/utils/serverHandler";
 import {getWordCategory} from "~/redux/action-creaters/category";
 import WordsComponent from "~/components/pages/words";
 import {Spinner} from "@nextui-org/react";
@@ -15,7 +15,9 @@ export default function Words({userData}: any) {
 
     const loadData = async () => {
         if (!dataFetch.rendered) {
+            // @ts-ignore
             await dispatch(getWords());
+            // @ts-ignore
             await dispatch(getWordCategory());
             setIsLoaded(true);
         }

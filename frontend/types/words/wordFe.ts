@@ -1,6 +1,6 @@
 import {WordStatuses} from "~/types/words/word";
 
-export const WordStatusNames = {
+export const WordStatusNames: Record<WordStatuses, string> = {
     [WordStatuses.NewWord]: 'New word',
     [WordStatuses.Learning]: 'Word learned',
     [WordStatuses.Learned]: 'Learning',

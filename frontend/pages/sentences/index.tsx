@@ -1,7 +1,7 @@
 import MainLayout from "~/components/layouts/main";
 import {useDispatch} from "react-redux";
 import {useEffect, useRef, useState} from "react";
-import serverHandler from "~/pages/serverHandler";
+import serverHandler from "~/utils/serverHandler";
 import {getSentenceCategory, getWordCategory} from "~/redux/action-creaters/category";
 import SentencesComponent from "~/components/pages/sentences";
 import {getSentences} from "~/redux/action-creaters/sentense";
@@ -15,7 +15,9 @@ export default function Sentences({userData}: any) {
 
     const loadData = async () => {
         if (!dataFetch.rendered) {
+            // @ts-ignore
             await dispatch(getSentences());
+            // @ts-ignore
             await dispatch(getSentenceCategory());
             setIsLoaded(true);
         }

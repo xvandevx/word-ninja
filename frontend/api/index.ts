@@ -6,13 +6,13 @@ import auth from "~/api/auth";
 import Cookies from "js-cookie";
 import categorys from "~/api/categorys";
 
-let API_URL = 'http://localhost:3010/api';
+let API_URL = '/api';
 
 const config = {
     API_URL,
 }
 
-axios.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('token')}`;
+axios.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('access_token')}`;
 
 export const Api = {
     users: users(axios, config),

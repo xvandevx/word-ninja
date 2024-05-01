@@ -19,7 +19,9 @@ export default function Category({name, categorys, selectedCategory, setSelected
     const doDeleteCategory = async () => {
         await Api.categorys.delete(selectedCategory);
         setDeleteCategory(null);
+        // @ts-ignore
         dispatch(getWordCategory());
+        // @ts-ignore
         dispatch(getSentenceCategory());
         setSelectedCategory(null);
     }
@@ -29,11 +31,12 @@ export default function Category({name, categorys, selectedCategory, setSelected
             <AccordionItem title={<div className='flex flex justify-between'>
                 <div className={styles.Category}>
                     <div>Category</div>
-                    {categorys.find(item => item.id === selectedCategory)?.name  || `All ${name}s`}
+                    {categorys.find((item:any) => item.id === selectedCategory)?.name  || `All ${name}s`}
                 </div>
                 {selectedCategory && (
                     <div className={styles.Buttons}>
                         <Button variant="light"  disableAnimation={true} size="sm" className={styles.Button} onClick={(e) => {
+                            // @ts-ignore
                             dispatch(showPopup(popupTypes.addCategory, categorys.find(item => item.id === selectedCategory)))
                         }}>
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50" >
@@ -66,7 +69,7 @@ export default function Category({name, categorys, selectedCategory, setSelected
                 )}
             </div>} >
                 <div className="flex gap-3 mb-3">
-                    {categorys.map((column) => (
+                    {categorys.map((column: any) => (
                         <Button key={column.uid} color={column.id === selectedCategory ? 'primary' : 'default'} variant='bordered' size="sm" onClick={() => {
                             setSelectedCategory(column.id === selectedCategory ? null : column.id);
                         }}>
@@ -74,6 +77,7 @@ export default function Category({name, categorys, selectedCategory, setSelected
                         </Button>
                     ))}
                     <Button size="sm" onClick={() => {
+                        // @ts-ignore
                         dispatch(showPopup(popupTypes.addCategory, {type: name === 'word' ? 1 : 2}))
                     }}>
                         Add new category

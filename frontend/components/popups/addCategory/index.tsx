@@ -28,7 +28,9 @@ export default function AddCategory({onHide}: any) {
                 await Api.categorys.add(result);
             }
 
+            // @ts-ignore
             dispatch(getWordCategory());
+            // @ts-ignore
             dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {

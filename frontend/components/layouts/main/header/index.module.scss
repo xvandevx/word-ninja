@@ -7,6 +7,12 @@
 
 .Logo {
     font-size: 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    img {
+        width: 30px;
+    }
 }
 
 .User {

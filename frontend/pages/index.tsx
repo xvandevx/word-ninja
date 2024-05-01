@@ -1,7 +1,7 @@
 import styles from './index.module.scss'
 import MainLayout from "~/components/layouts/main";
 import {useEffect, useRef, useState} from "react";
-import serverHandler from "~/pages/serverHandler";
+import serverHandler from "~/utils/serverHandler";
 
 export default function Home({userData}: any) {
     const [mainText, setMainText] = useState('_');
@@ -36,6 +36,8 @@ export default function Home({userData}: any) {
         <MainLayout userData={userData}>
             <div className={styles.MainText}>
                 {mainText}
+
+                <span>Developed by <a href='https://xvan.dev' target='_blank' rel='nofollow'>Ivan Alekseev</a></span>
             </div>
         </MainLayout>
     )
@@ -43,7 +45,8 @@ export default function Home({userData}: any) {
 
 export const getServerSideProps = async (ctx: any) => {
     const data = await serverHandler(ctx);
-    if (data.props.userData?.id) {
+
+    if (data.props?.userData?.id) {
         return {
             redirect: {
                 destination: '/words',
@@ -53,7 +56,7 @@ export const getServerSideProps = async (ctx: any) => {
     return data
 }
 
-export async function writeText(text: string, setText: (text: string) => {}) {
+export async function writeText(text: string, setText: (value: (((prevState: string) => string) | string)) => void) {
     let resText = '_';
     setText(resText);
     console.log('test', text)

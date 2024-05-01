@@ -31,14 +31,17 @@ export default function SentencesComponent() {
     const [deleteItem, setDeleteItem] = useState(null);
 
     const doDeleteItem = async () => {
+        // @ts-ignore
         await Api.sentences.delete(deleteItem.id);
         setDeleteItem(null);
+        // @ts-ignore
         dispatch(getSentences());
     }
 
-    const categorysByIds = useMemo(() => {
+    const categorysByIds: any = useMemo(() => {
         const categorys = {}
-        sentenceCategorys.map(item => {
+        sentenceCategorys.map((item: any) => {
+            // @ts-ignore
             categorys[item.id] = item;
         });
         return categorys;
@@ -51,21 +54,22 @@ export default function SentencesComponent() {
                 items={sentences}
                 name='sentence'
                 categorys={sentenceCategorys}
-                handleDeleteItem={async (itemId) => {
+                handleDeleteItem={async (itemId: any) => {
                     await Api.sentences.delete(itemId);
                 }}
                 handleGetItems={async () => {
+                    // @ts-ignore
                     await dispatch(getSentences());
                 }}
                 addItemPopupType={popupTypes.addSentence}
                 columns={{
-                    Sentence: (item) => (<>
+                    Sentence: (item: any) => (<>
                         <p className="text-bold text-sm capitalize">{item.sentence}</p>
                         {item.comment && <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
                     </>),
-                    Translation: (item) => item.translation,
-                    Categories: (item) => item.categorys.filter(item => categorysByIds[item.id]).map(item => (
-                        <Chip className="capitalize"  size="sm" variant="flat">
+                    Translation: (item: any) => item.translation,
+                    Categories: (item: any) => item.categorys.filter((item: any) => categorysByIds[item.id]).map((item: any) => (
+                        <Chip className="capitalize"  size="sm" variant="flat" key={item.id}>
                             {categorysByIds[item.id]?.name}
                         </Chip>
                     )),

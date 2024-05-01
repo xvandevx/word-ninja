@@ -29,7 +29,9 @@ export default function AddWord({onHide}: any) {
             } else {
                 await Api.words.add(result);
             }
+            // @ts-ignore
             await dispatch(getWords());
+            // @ts-ignore
             await dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {
@@ -55,7 +57,7 @@ export default function AddWord({onHide}: any) {
             setResult((result: any) => ({...result, 'translation': data.translation}));
         }
         if (data.categorys) {
-            setResult((result: any) => ({...result, 'categorys': data.categorys.map(item => `${item.id}`)}));
+            setResult((result: any) => ({...result, 'categorys': data.categorys.map((item: any) => `${item.id}`)}));
         }
     }, [data]);
 
@@ -84,7 +86,7 @@ export default function AddWord({onHide}: any) {
                     selectionMode="multiple"
                     onSelectionChange={(value: any) => setResult({...result, 'categorys': [...value]})}
                 >
-                    {wordCategorys.map((item) => (
+                    {wordCategorys.map((item: any) => (
                         <SelectItem key={item.id} value={item.id}>
                             {item.name}
                         </SelectItem>
@@ -102,7 +104,9 @@ export default function AddWord({onHide}: any) {
                 >
                     {Object.keys(WordStatusNames).map((status) => (
                         <SelectItem key={status} value={status}>
-                            {WordStatusNames[status]}
+                            {//@ts-ignore
+                                WordStatusNames[status]
+                            }
                         </SelectItem>
                     ))}
                 </Select>

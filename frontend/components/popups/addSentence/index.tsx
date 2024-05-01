@@ -30,7 +30,9 @@ export default function AddSentence({onHide}: any) {
             } else {
                 await Api.sentences.add(result);
             }
+            // @ts-ignore
             await dispatch(getSentences());
+            // @ts-ignore
             await dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {
@@ -54,7 +56,7 @@ export default function AddSentence({onHide}: any) {
             setResult((result: any) => ({...result, 'translation': data.translation}));
         }
         if (data.categorys) {
-            setResult((result: any) => ({...result, 'categorys': data.categorys.map(item => `${item.id}`)}));
+            setResult((result: any) => ({...result, 'categorys': data.categorys.map((item: any) => `${item.id}`)}));
         }
     }, [data]);
 
@@ -83,7 +85,7 @@ export default function AddSentence({onHide}: any) {
                     selectionMode="multiple"
                     onSelectionChange={(value: any) => setResult({...result, 'categorys': [...value]})}
                 >
-                    {sentenceCategorys.map((item) => (
+                    {sentenceCategorys.map((item: any) => (
                         <SelectItem key={item.id} value={item.id}>
                             {item.name}
                         </SelectItem>

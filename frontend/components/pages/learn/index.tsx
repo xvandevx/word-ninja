@@ -33,7 +33,7 @@ export default function LearnComponent() {
 
     useEffect(() => {
         if (currentLearningWordId && !isLoading && currentLearningWordId !== +word.id) {
-            getWord(currentLearningWordId);
+            getWord();
         }
     }, [currentLearningWordId, word])
 
@@ -52,6 +52,8 @@ export default function LearnComponent() {
         return [...statusFilter].map(item => +item);
     }, [statusFilter])
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <div>
             {learningWordIds.length === 0 && (
@@ -70,7 +72,10 @@ export default function LearnComponent() {
                                     endContent={<ChevronDownIcon className="text-small" />}
                                     variant="flat"
                                 >
-                                    {!WordStatusNames[word.status] ? `Status` : WordStatusNames[word.status]}
+                                    {
+                                        // @ts-ignore
+                                        !WordStatusNames[word.status] ? `Status` : WordStatusNames[word.status]
+                                    }
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
@@ -79,15 +84,20 @@ export default function LearnComponent() {
                                 closeOnSelect={false}
                                 selectionMode="multiple"
                                 onSelectionChange={async (status) => {
+
                                     await Api.words.update(word.id, {
+                                        // @ts-ignore
                                         status: {...status}.currentKey
                                     });
                                     await getWord();
                                 }}
                             >
-                                {Object.keys(WordStatusNames).map((status) => (
+                                {Object.keys(WordStatusNames).map((status: string) => (
                                     <DropdownItem key={status} className="capitalize">
-                                        {WordStatusNames[status]}
+                                        {
+                                            // @ts-ignore
+                                            WordStatusNames[status]
+                                        }
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
@@ -144,6 +154,7 @@ export default function LearnComponent() {
                             <div className='flex justify-center mt-3'>
 
                                 <Button disableAnimation={true} className={styles.Button} onClick={(e) => {
+                                    // @ts-ignore
                                     dispatch(showPopup(popupTypes.addWord, word));
                                 }}>
                                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" >
@@ -168,7 +179,9 @@ export default function LearnComponent() {
                                 setNextWord();
                             }}>Skip</Button>
                             <Button color="secondary" onClick={() => {
+                                // @ts-ignore
                                 dispatch(setLearningWords(learningWordIds.filter(wordId => wordId != currentLearningWordId)));
+                                // @ts-ignore
                                 dispatch(setLearnedWords([...learnedWordIds, currentLearningWordId]));
                                 setNextWord();
                             }}>Learned ({learnedWordIds.length})</Button>

@@ -1,5 +1,4 @@
 import styles from './index.module.scss'
-import InputMask from 'react-input-mask';
 import clsx from "clsx";
 
 export default function Input({

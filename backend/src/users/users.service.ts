@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async add(dto: UserDto) {
-    const user = await this.usersRepository.create(dto);
+    return await this.usersRepository.create(dto);
   }
 
   async update(id: number, dto: UserDto) {

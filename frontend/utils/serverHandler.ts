@@ -1,8 +1,7 @@
 import * as process from "process";
-import axios from "axios";
 
 export default async (ctx: any, props = {}) => {
-    const token = ctx.req.cookies.token;
+    const token = ctx.req.cookies.access_token;
     let auth: any = {};
 
     if (token) {
@@ -15,6 +14,7 @@ export default async (ctx: any, props = {}) => {
             });
             auth = await res.json();
         } catch(e) {
+            // @ts-ignore
             console.log('error fetch', e.message)
         }
     }

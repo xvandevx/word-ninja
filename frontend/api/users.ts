@@ -1,4 +1,4 @@
-import {UserInterface} from "~/backendTypes/user";
+import {UserInterface} from "~/types/user";
 
 export default (axios: any, config: any) => ({
     async add(formData: UserInterface) {

@@ -25,10 +25,11 @@ export default function Popups() {
     }, [visibleType] );
 
     const onHide = () => {
+        // @ts-ignore
         dispatch(showPopup(popupTypes.none))
     }
 
-    return visibleType !== popupTypes.none && (
+    return visibleType !== popupTypes.none ? (
         <noindex><div className={styles.Wrapper} onClick={onHide}>
             <div className={styles.Popup} onClick={e => e.stopPropagation()}>
                 <div className={styles.Content}>
@@ -51,5 +52,5 @@ export default function Popups() {
                 </div>
             </div>
         </div></noindex>
-    )
+    ) : null
 }

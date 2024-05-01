@@ -1,6 +1,6 @@
 import styles from './index.module.scss'
 
-export default function Panel({links}) {
+export default function Panel({links}: any) {
     return (
         <div className={styles.Panel}>
             <div className={styles.Links}>

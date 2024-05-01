@@ -1,62 +1,59 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { AuthDto } from './dto/auth-dto';
+import {UsersService} from "../users/users.service";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+      private jwtService: JwtService,
+      private usersService: UsersService,
   ) {}
 
-  async login(loginDto: AuthDto) {
-    const user = await this.usersService.getUserByEmail(loginDto.email);
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    if (!user.dataValues.password) {
-      return {
-        id: user.id,
-        status: 'setPassword',
-      };
-    }
-
-    if (!(await bcrypt.compare(loginDto.password, user.dataValues.password))) {
-      throw new UnauthorizedException();
-    }
-
-    return {
-      status: 'success',
-      token: this.jwtService.sign({
-        email: user.email,
-        id: user.id,
-      }),
-    };
+  generateJwt(payload) {
+    return this.jwtService.sign(payload);
   }
 
-  async setPassword(setPasswordDto: AuthDto) {
-    const user = await this.usersService.getUserByEmail(setPasswordDto.email);
-
+  async signIn(user) {
     if (!user) {
-      throw new UnauthorizedException();
+      throw new BadRequestException('Unauthenticated');
     }
-    if (!user.password) {
-      await user.update({
-        password: await bcrypt.hash(setPasswordDto.password, 5),
+
+    const userExists = await this.findUserByEmail(user.email);
+
+    if (!userExists) {
+      return this.registerUser(user);
+    }
+
+    return this.generateJwt({
+      id: userExists.id,
+      ...user,
+    });
+  }
+
+  async registerUser(user: any) {
+    try {
+      const newUser = await this.usersService.add(user);
+
+      return this.generateJwt({
+        id: newUser.id,
+        ...user
       });
+    } catch {
+      throw new InternalServerErrorException();
     }
   }
 
-  private async validateUser(userDto: any) {
-    /*const user = await  this.usersService.getUserByEmail(userDto.email);
-    const passwordEquals = await bcrypt.compare(userDto.password);
-    if (user && passwordEquals) {
-        return user;
+  async findUserByEmail(email) {
+    const user = await this.usersService.getUserByEmail(email);
+
+    if (!user) {
+      return null;
     }
-    throw new UnauthorizedException({messgae: 'Unable'})*/
+
+    return user;
   }
 }

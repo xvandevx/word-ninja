@@ -42,7 +42,7 @@ export default function Header({userData}: any) {
             >
                 <div className={styles.Header}>
                     <a className={styles.Logo} href={'/'}>
-                        <span>WORD</span><img src='/ninja.svg'/><span>NINJA</span>
+                        <span>WORDS</span><img src='/ninja.svg'/><span>NINJA</span>
                     </a>
                     {userData && (
                         <div className={styles.Menu}>

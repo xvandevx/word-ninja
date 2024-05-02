@@ -6,6 +6,7 @@ export default async (ctx: any, props = {}) => {
 
     if (token) {
         try {
+            console.log('testes', process.env.API_HOST + "/api/auth/check")
             const res = await fetch(process.env.API_HOST + "/api/auth/check", {
                 method: "POST",
                 headers: {

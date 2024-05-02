@@ -1,4 +1,5 @@
 import {WordStatuses} from "~/types/words/word";
+const transltaions = require('../translations.json');
 
 export default (axios: any, config: any) => ({
     async add(formData: any) {
@@ -30,5 +31,12 @@ export default (axios: any, config: any) => ({
     },
     async setStatus(id: number, status: WordStatuses) {
         await axios.post(`${config.API_URL}/words/setStatus/${id}?status=${status}`);
+    },
+    getTranslation(word: string) {
+        const wordPreared = word.trim();
+        const result = transltaions.filter((word: any) => {
+            return word.en?.includes(wordPreared);
+        });
+        return result;
     },
 });

@@ -1,5 +1,5 @@
 import PopupFormWrapper from "~/components/popups/popupFormWrapper";
-import {Input, Select, SelectItem, Textarea} from "@nextui-org/react";
+import {Button, Input, Select, SelectItem, Textarea} from "@nextui-org/react";
 import {useEffect, useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
@@ -8,6 +8,7 @@ import {popupTypes} from "~/redux/reducers/popupReducer";
 import {getWords} from "~/redux/action-creaters/word";
 import {WordStatuses} from "~/types/words/word";
 import {WordStatusNames} from "~/types/words/wordFe";
+import styles from "./index.module.scss";
 
 export default function AddWord({onHide}: any) {
     const [result, setResult]: any = useState({status: `${WordStatuses.NewWord}`});
@@ -61,6 +62,17 @@ export default function AddWord({onHide}: any) {
         }
     }, [data]);
 
+    const [translations, setTranslation] = useState([]);
+
+    useEffect(() => {
+        if (result.word?.length > 3) {
+            const translations = Api.words.getTranslation(result.word);
+            setTranslation(translations);
+        } else {
+            setTranslation([]);
+        }
+    }, [result]);
+
     return (
         <PopupFormWrapper
             title={`${data?.id ? "Update" : "Add"} word`}
@@ -72,13 +84,22 @@ export default function AddWord({onHide}: any) {
                 <Input
                     label="Word"
                     value={result.word}
-                    onValueChange={(value: any) => setResult({...result, 'word': value})}
+                    onValueChange={async (value: any) => {
+                        setResult({...result, 'word': value})
+                    }}
                 />
                 <Input
                     label="Translation"
                     value={result.translation}
                     onValueChange={(value: any) => setResult({...result, 'translation': value})}
                 />
+                {translations && <div className={styles.Translations}>
+                    {Array.isArray(translations) && translations.map((word: any) => (
+                        <Button size='sm' key={word.id} onClick={() => {
+                            setResult({...result, 'word': word.en, 'translation': word.ru})
+                        }}>{word.ru}</Button>
+                    ))}
+                </div>}
 
                 <Select
                     label="Categorys"

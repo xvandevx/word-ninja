@@ -1,4 +1,4 @@
-name: Simple admin panel deploy to AWS
+name: Word ninja deploy to AWS
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.REMOTE_SERVER_SSH_KEY }}
           port: ${{ secrets.REMOTE_SERVER_SSH_PORT }}
           script: |
-            cd adminPanel/
+            cd wn/
             docker rmi -f xvandev/word-ninja:latest
             docker-compose down
             docker-compose up -d
@@ -72,7 +72,7 @@ jobs:
           password: ${{ secrets.REMOTE_SERVER_SSH_KEY }}
           port: ${{ secrets.REMOTE_SERVER_SSH_PORT }}
           script: |
-            cd adminPanel/
+            cd wn/
             docker rmi -f xvandev/word-ninja-backend:latest
             docker-compose down
             docker-compose up -d

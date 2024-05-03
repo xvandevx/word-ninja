@@ -14,3 +14,15 @@
     }
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .MainText {
+    font-size: 25px;
+  }
+}
+
+@media only screen and (max-width: 765px) {
+  .MainText {
+    font-size: 18px;
+  }
+}

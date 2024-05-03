@@ -19,6 +19,7 @@ export default function AddWords({onHide}: any) {
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const {words} = useSelector((state: any) => state.word)
 
     const {wordCategorys} = useSelector((state: any) => state.category)
 
@@ -26,15 +27,20 @@ export default function AddWords({onHide}: any) {
         setError('');
         setLoading(true)
 
+        const addedWords = words.map(word => word.word);
+
         try {
             const words = result.words?.split(',');
             for (const word of words) {
-                console.log('word', word)
-                await Api.words.add({
-                    word,
-                    status: result.status,
-                    categorys: result.categorys,
-                });
+                const wordPrepeared = word.toLowerCase().trim();
+                if (!addedWords.includes(wordPrepeared)) {
+                    addedWords.push(wordPrepeared)
+                    await Api.words.add({
+                        word: wordPrepeared,
+                        status: result.status,
+                        categorys: result.categorys,
+                    });
+                }
             }
 
             // @ts-ignore

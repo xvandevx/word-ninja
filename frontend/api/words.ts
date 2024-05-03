@@ -35,7 +35,7 @@ export default (axios: any, config: any) => ({
     getTranslation(word: string) {
         const wordPreared = word.trim();
         const result = transltaions.filter((word: any) => {
-            return word.en?.includes(wordPreared);
+            return word.en?.startsWith(wordPreared);
         });
         return result;
     },

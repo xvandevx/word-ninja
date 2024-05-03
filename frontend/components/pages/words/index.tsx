@@ -15,7 +15,7 @@ export default function WordsComponent() {
     const {words} = useSelector((state: any) => state.word)
     const {wordCategorys} = useSelector((state: any) => state.category)
 
-    const categorysByIds = useMemo(() => {
+    const categorysByIds: any = useMemo(() => {
         const categorysByIds = {}
         wordCategorys.map((item: any) => {
             // @ts-ignore
@@ -44,6 +44,12 @@ export default function WordsComponent() {
                     Word: (item: any) => (<>
                         <p className="text-bold text-sm capitalize">{item.word}</p>
                         {item.comment && <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
+                        <div className="text-bold text-sm capitalize text-default-400">{item.pluses}/{item.minuses}</div>
+                        <Chip className="capitalize"  size="sm" variant="flat">
+                            {
+                                // @ts-ignore
+                                WordStatusNames[item.status]}
+                        </Chip>
                     </>),
                     Translation: (item: any) => item.translation,
                     // @ts-ignore
@@ -55,9 +61,6 @@ export default function WordsComponent() {
                             }
                         </Chip>
                     )),
-                    // @ts-ignore
-                    Status: (item: any) => WordStatusNames[item.status],
-                    ['+/-']: (item: any) => `${item.pluses}/${item.minuses}`
                 }}
                 isSelectionableTable={true}
             />

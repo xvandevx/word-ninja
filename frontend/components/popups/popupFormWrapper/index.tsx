@@ -35,6 +35,7 @@ export default function PopupFormWrapper({
             </div>
             <div className={styles.Buttom}>
                 <Button onClick={onSubmit} isLoading={isLoading}>Submit</Button>
+                <Button onClick={onHide} isLoading={isLoading}>Cancel</Button>
             </div>
         </>
     )

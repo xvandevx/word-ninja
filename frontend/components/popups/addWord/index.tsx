@@ -17,18 +17,40 @@ export default function AddWord({onHide}: any) {
     const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const {data} = useSelector((state: any) => state.popup)
-
+    const {words} = useSelector((state: any) => state.word)
 
     const {wordCategorys} = useSelector((state: any) => state.category)
 
     const submit = async () => {
         setError('');
+
+        const existingWord = words.find(word => word.word === result.word);
+
+        if (existingWord) {
+            if (data.id) {
+                if (data.id !== existingWord.id) {
+                    setError('Word already exist');
+                    return
+                }
+            } else {
+                setError('Word already exist');
+                return
+            }
+        }
         setLoading(true)
         try {
             if (data.id) {
-                await Api.words.update(data.id, result);
+                await Api.words.update(data.id, {
+                    ...result,
+                    word: result.word.toLowerCase().trim(),
+                    translation: result.translation.toLowerCase().trim(),
+                });
             } else {
-                await Api.words.add(result);
+                await Api.words.add({
+                    ...result,
+                    word: result.word.toLowerCase().trim(),
+                    translation: result.translation.toLowerCase().trim(),
+                });
             }
             // @ts-ignore
             await dispatch(getWords());
@@ -93,7 +115,7 @@ export default function AddWord({onHide}: any) {
                     value={result.translation}
                     onValueChange={(value: any) => setResult({...result, 'translation': value})}
                 />
-                {translations && <div className={styles.Translations}>
+                {translations.length > 0 && <div className={styles.Translations}>
                     {Array.isArray(translations) && translations.map((word: any) => (
                         <Button size='sm' key={word.id} onClick={() => {
                             setResult({...result, 'word': word.en, 'translation': word.ru})

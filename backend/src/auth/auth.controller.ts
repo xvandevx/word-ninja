@@ -31,6 +31,7 @@ export class AuthController {
       sameSite: true,
       secure: false,
     });
+    console.log('googleAuthCallback', token)
 
     return res.redirect('/');
   }

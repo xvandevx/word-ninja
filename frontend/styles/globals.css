@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    min-width: 400px;
+}
+
 .container {
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
     width: 100%;
+    padding: 0 50px;
+    min-width: 400px;
 }
 
 .fade-enter {
@@ -30,4 +36,11 @@
     opacity: 1;
     transform: translateY(0px);
     transition: opacity 500ms ease, transform 500ms ease;
+}
+
+
+@media only screen and (max-width: 991px) {
+    .container {
+        padding: 0 25px;
+    }
 }

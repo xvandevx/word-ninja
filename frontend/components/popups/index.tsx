@@ -30,7 +30,7 @@ export default function Popups() {
     }
 
     return visibleType !== popupTypes.none ? (
-        <noindex><div className={styles.Wrapper} onClick={onHide}>
+        <noindex><div className={styles.Wrapper}>
             <div className={styles.Popup} onClick={e => e.stopPropagation()}>
                 <div className={styles.Content}>
                     <span className={styles.Close} onClick={onHide}></span>

@@ -21,6 +21,7 @@ import {EyeIcon} from "~/components/icons/eye";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {WordStatuses} from "~/types/words/word";
+import clsx from "clsx";
 
 export default function ContentTable({
     name,
@@ -113,7 +114,7 @@ export default function ContentTable({
                 {name === 'word' && (
                     <div className="flex gap-3">
                         <Dropdown>
-                            <DropdownTrigger className="hidden sm:flex">
+                            <DropdownTrigger className="sm:flex">
                                 <Button
                                     endContent={<ChevronDownIcon className="text-small" />}
                                     size="sm"
@@ -237,7 +238,7 @@ export default function ContentTable({
                                  <TableCell key={cell}>{cell(item)}</TableCell>
                             ))}
                             <TableCell>
-                                <div className='flex justify-end'>
+                                <div className={clsx('flex justify-end', styles.Actions)}>
                                     <Button variant="light" disableAnimation={true} size="sm" className={styles.Button} onClick={(e) => {
                                         // @ts-ignore
                                         dispatch(showPopup(addItemPopupType, item));

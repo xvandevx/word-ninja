@@ -64,17 +64,6 @@ export default function AddCategory({onHide}: any) {
                 value={result.name}
                 onValueChange={(value: any) => setResult({...result, 'name': value})}
             />
-            <Select
-                label="Type"
-                selectedKeys={result.type}
-                onSelectionChange={(value: any) => setResult({...result, 'type': [...value]})}
-            >
-                {CategoryTypesList.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                        {item.name}
-                    </SelectItem>
-                ))}
-            </Select>
         </PopupFormWrapper>
     )
 }

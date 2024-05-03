@@ -6,7 +6,7 @@ import auth from "~/api/auth";
 import Cookies from "js-cookie";
 import categorys from "~/api/categorys";
 
-let API_URL = '/api';
+let API_URL = 'http://localhost/api';
 
 const config = {
     API_URL,

@@ -24,7 +24,7 @@ export default function AddWord({onHide}: any) {
     const submit = async () => {
         setError('');
 
-        const existingWord = words.find(word => word.word === result.word);
+        const existingWord = words.find((word: any) => word.word === result.word);
 
         if (existingWord) {
             if (data.id) {

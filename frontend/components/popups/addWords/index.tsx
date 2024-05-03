@@ -27,7 +27,7 @@ export default function AddWords({onHide}: any) {
         setError('');
         setLoading(true)
 
-        const addedWords = words.map(word => word.word);
+        const addedWords = words.map((word: any) => word.word);
 
         try {
             const words = result.words?.split(',');

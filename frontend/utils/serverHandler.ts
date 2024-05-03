@@ -1,10 +1,19 @@
 import * as process from "process";
+import Cookies from 'cookies';
 
 export default async (ctx: any, props = {}) => {
-    const token = ctx.req.cookies.access_token;
+    const cookies = new Cookies(ctx.req, ctx.res)
+    let token = cookies.get('access_token');
     let auth: any = {};
 
-    console.log('token', token, ctx.req.cookies)
+    console.log('token 1', token)
+
+    if (ctx.query.token) {
+        token = ctx.query.token;
+        console.log('token 2', token)
+        const currentDate = new Date();
+        cookies.set('access_token', token,  { expires: new Date(currentDate.setDate(currentDate.getDate() + 30)) })
+    }
 
     if (token) {
         try {

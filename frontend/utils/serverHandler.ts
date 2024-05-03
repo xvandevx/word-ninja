@@ -9,7 +9,7 @@ export default async (ctx: any, props = {}) => {
     if (ctx.query.token) {
         token = ctx.query.token;
         const currentDate = new Date();
-        cookies.set('access_token', token,  { expires: new Date(currentDate.setDate(currentDate.getDate() + 30)) })
+        cookies.set('access_token', token,  { httpOnly: false, expires: new Date(currentDate.setDate(currentDate.getDate() + 30)) })
     }
 
     if (token) {

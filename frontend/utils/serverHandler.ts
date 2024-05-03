@@ -4,6 +4,8 @@ export default async (ctx: any, props = {}) => {
     const token = ctx.req.cookies.access_token;
     let auth: any = {};
 
+    console.log('token', token, ctx.req.cookies)
+
     if (token) {
         try {
             console.log('testes', process.env.API_HOST + "/api/auth/check", {

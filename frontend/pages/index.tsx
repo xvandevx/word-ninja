@@ -46,6 +46,8 @@ export default function Home({userData}: any) {
 export const getServerSideProps = async (ctx: any) => {
     const data = await serverHandler(ctx);
 
+    console.log('getServerSideProps serverHandler', data)
+
     if (data.props?.userData?.id) {
         return {
             redirect: {

@@ -1,17 +1,19 @@
 import ContentTable from "../../common/contentTable";
-import styles from "~/components/common/contentTable/index.module.scss";
-import {Button, Chip, Spinner, TableColumn, TableHeader} from "@nextui-org/react";
-import {setLearnedWords, setLearningWords} from "~/redux/action-creaters/learn";
+import styles from "./index.module.scss";
+import {Button, Checkbox, Chip} from "@nextui-org/react";
 import {useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
 import {popupTypes} from "~/redux/reducers/popupReducer";
 import {WordStatusNames} from "~/types/words/wordFe";
 import {getWords} from "~/redux/action-creaters/word";
+import {GoogleIcon} from "~/components/icons/google";
+import {YandexIcon} from "~/components/icons/yandex";
+import clsx from "clsx";
 
 export default function WordsComponent() {
     const dispatch = useDispatch();
-    const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+    const [selectedKeys, setSelectedKeys]: any = useState({});
     const {words} = useSelector((state: any) => state.word)
     const {wordCategorys} = useSelector((state: any) => state.category)
 
@@ -24,11 +26,19 @@ export default function WordsComponent() {
         return categorysByIds;
     }, [wordCategorys])
 
+    const selectedKeyIds: number[] = useMemo(() => {
+        // @ts-ignore
+        return Object.values(selectedKeys).filter((item: boolean) => item);
+    }, [selectedKeys])
+
+    const isAllSelected = useMemo(() => {
+        return selectedKeyIds.length === words.length
+    }, [selectedKeyIds, words])
+
     // @ts-ignore
     return (
         <>
             <ContentTable
-                setSelectedKeys={setSelectedKeys}
                 items={words}
                 name='word'
                 categorys={wordCategorys}
@@ -40,46 +50,94 @@ export default function WordsComponent() {
                     await dispatch(getWords());
                 }}
                 addItemPopupType={popupTypes.addWord}
-                columns={{
-                    Word: (item: any) => (<>
-                        <p className="text-bold text-sm capitalize">{item.word}</p>
-                        {item.comment && <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
-                        <div className="text-bold text-sm capitalize text-default-400">{item.pluses}/{item.minuses}</div>
-                        <Chip className="capitalize"  size="sm" variant="flat">
-                            {
-                                // @ts-ignore
-                                WordStatusNames[item.status]}
-                        </Chip>
-                    </>),
-                    Translation: (item: any) => item.translation,
-                    // @ts-ignore
-                    Categories: (item: any) => item.categorys.filter((item: any) => categorysByIds[item.id]).map((item: any) => (
-                        <Chip className="capitalize"  size="sm" variant="flat" key={item.id}>
-                            {
-                                // @ts-ignore
-                                categorysByIds[item.id]?.name
+                tableHead={
+                    <div className={clsx(styles.TableHead, styles.TableGrid)}>
+                        <div><Checkbox isSelected={isAllSelected} onChange={() => {
+                            if (!isAllSelected) {
+                                const selectedKeys = {};
+                                words.map((item: any) => {
+                                    // @ts-ignore
+                                    selectedKeys[item.id] = true;
+                                })
+                                setSelectedKeys(selectedKeys)
+                            } else {
+                                setSelectedKeys({})
                             }
-                        </Chip>
-                    )),
-                }}
-                isSelectionableTable={true}
-            />
+                        }}/></div>
+                        <div>Word</div>
+                        <div>Translation</div>
+                        <div>Status</div>
+                        <div>Categories</div>
+                        <div></div>
+                    </div>
+                }
+                tableBodyItem={(item: any, actions: any) =>
+                    <div className={clsx(styles.TableItem, styles.TableGrid)} onClick={(e) => {
+                        setSelectedKeys({...selectedKeys, [item.id]: !selectedKeys[item.id]})
+                    }}>
+                        <div><Checkbox isSelected={selectedKeys[item.id]} isReadOnly={true}/> </div>
+                        <div>
+                            <div className='flex'>
+                                <span>{item.word}</span>
+                            </div>
+                            <div className='flex gap-2'>
+                                <a
+                                    href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${item.word || item.sentence}%0A&op=translate`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <GoogleIcon />
+                                </a>
+                                <a
+                                    href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${item.word || item.sentence}`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <YandexIcon />
+                                </a>
+                            </div>
+                            {item.comment && <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
+                            <div className={styles.Pluses}>{item.pluses}/{item.minuses}</div>
+
+                        </div>
+                        <div>{item.translation}</div>
+                        <div className={styles.Status}>
+                            <Chip className="capitalize"  size="sm" variant="flat">
+                                {
+                                    // @ts-ignore
+                                    WordStatusNames[item.status]}
+                            </Chip>
+
+                        </div>
+                        <div className={styles.Cats}>{item.categorys.filter((item: any) => categorysByIds[item.id]).map((item: any) => (
+                            <Chip className="capitalize"  size="sm" variant="flat" key={item.id}>
+                                {
+                                    // @ts-ignore
+                                    categorysByIds[item.id]?.name
+                                }
+                            </Chip>
+                        ))}</div>
+                        <div className={styles.Actions}>{actions}</div>
+                    </div>
+                }
+            >
+            </ContentTable>
             {  // @ts-ignore
-            [...selectedKeys].length > 0 && (
+            selectedKeyIds.length > 0 && (
                 <div className={styles.PanelWrapper}>
                     <div className={styles.Panel}>
                         <Button onClick={() => {
                             // @ts-ignore
-                            dispatch(setLearningWords([...selectedKeys]));
+                            dispatch(setLearningWords(selectedKeyIds));
                             // @ts-ignore
                             dispatch(setLearnedWords([]));
                             window.location.href = '/learn'
                         }}>Learn {
                             // @ts-ignore
-                            [...selectedKeys].length} word{[...selectedKeys].length > 1 && 's'}</Button>
-                        {/*<Button>Delete</Button>
-                        <Button>Change status</Button>
-                        <Button>Add category</Button>*/}
+                            selectedKeyIds.length} word{selectedKeyIds.length > 1 && 's'}</Button>
+
                     </div>
                 </div>
             )}

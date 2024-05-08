@@ -25,14 +25,14 @@ import clsx from "clsx";
 
 export default function ContentTable({
     name,
-    isSelectionableTable,
     addItemPopupType,
-    setSelectedKeys,
     items,
     categorys,
     handleDeleteItem,
     handleGetItems,
-    columns
+    columns,
+    tableHead,
+    tableBodyItem
 }: any) {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
@@ -78,16 +78,44 @@ export default function ContentTable({
         return itemsFiltered.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage);
     }, [itemsFiltered, page, rowsPerPage]);
 
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
+    const actions = (item: any) => <>
+        <Button variant="light" disableAnimation={true} size="sm"  onClick={(e) => {
+            // @ts-ignore
+            dispatch(showPopup(addItemPopupType, item));
+        }}>
+             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <EditIcon />
+            </span>
+        </Button>
+        <Tooltip
+            content={
+                <DeleteUser
+                    name={` item ${deleteItem?.id}`}
+                    onDelete={() => {
+                        doDeleteItem()
+                    }}
+                    onCancel={() => {setDeleteItem(null)}}
+                />
+            }
+            placement='top'
+            isOpen={deleteItem?.id === item.id ? true : false}
+        >
+            <Button variant="light" disableAnimation={true} size="sm" onClick={() => {
+                setDeleteItem(item);
+            }}>
+                <div className="text-lg text-danger cursor-pointer active:opacity-50" >
+                    <DeleteIcon />
+                </div>
+            </Button>
+        </Tooltip>
+    </>
+
     return (
         <div>
             <div className={styles.Categorys}>
                 <Category name={name} categorys={categorys} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
             </div>
-            <div className="flex justify-between gap-3 items-end mb-3">
+            <div className="flex justify-between gap-3 items-end mb-3 flex-col sm:flex-row lg:flex-row">
                 <Input
                     isClearable
                     classNames={{
@@ -196,104 +224,24 @@ export default function ContentTable({
                     </select>
                 </label>
             </div>
-            <Table
-                aria-label="Example static collection table"
-                removeWrapper
-                selectionMode={isSelectionableTable && 'multiple'}
-                onSelectionChange={(keys) => {
-                    if (keys === 'all') {
-                        setSelectedKeys(new Set(wordsFilteredPaged.map((word: any) => {
-                            return `${word.id}`;
-                        })));
-                    } else {
-                        setSelectedKeys(keys)
-                    }
-                }}
-                // @ts-ignore
-                onSortChange={setSortDescriptor}
-                bottomContent={
-                    <div className="flex w-full justify-center">
-                        <Pagination
-                            isCompact
-                            showControls
-                            showShadow
-                            color="secondary"
-                            page={page}
-                            total={Math.ceil(itemsFiltered.length / rowsPerPage)}
-                            onChange={(page) => setPage(page)}
-                        />
-                    </div>
-                }
-            >
-                <TableHeader>
-                    {columns && Object.keys(columns).map((column: any) => (
-                        <TableColumn key={column}>{column}</TableColumn>
-                    ))}
-                    <TableColumn><span/></TableColumn>
-                </TableHeader>
-                <TableBody>
-                    {itemsFiltered?.map((item: any) => (
-                        <TableRow key={item.id}>
-                            {columns && Object.values(columns).map((cell: any) => (
-                                 <TableCell key={cell}>{cell(item)}</TableCell>
-                            ))}
-                            <TableCell>
-                                <div className={clsx('flex justify-end', styles.Actions)}>
-                                    <Button variant="light" disableAnimation={true} size="sm" className={styles.Button} onClick={(e) => {
-                                        // @ts-ignore
-                                        dispatch(showPopup(addItemPopupType, item));
-                                    }}>
-                                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EditIcon />
-                                        </span>
-                                    </Button>
-                                    <Tooltip
-                                        content={
-                                            <DeleteUser
-                                                name={` item ${deleteItem?.id}`}
-                                                 onDelete={() => {
-                                                     doDeleteItem()
-                                                 }}
-                                                 onCancel={() => {setDeleteItem(null)}}
-                                            />
-                                        }
-                                        placement='top'
-                                        isOpen={deleteItem?.id === item.id ? true : false}
-                                    >
-                                        <Button variant="light" disableAnimation={true} size="sm" className={styles.Button} onClick={() => {
-                                            setDeleteItem(item);
-                                        }}>
-                                            <div className="text-lg text-danger cursor-pointer active:opacity-50" >
-                                                <DeleteIcon />
-                                            </div>
-                                        </Button>
-                                    </Tooltip>
-                                    <Button variant="light" disableAnimation={true} size="sm" className={styles.Button}>
-                                        <a
-                                            href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${item.word || item.sentence}%0A&op=translate`}
-                                            target="_blank"
-                                            rel="nofollow"
-                                            className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                        >
-                                            <GoogleIcon />
-                                        </a>
-                                    </Button>
-                                    <Button variant="light" disableAnimation={true} size="sm" className={styles.Button}>
-                                        <a
-                                            href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${item.word || item.sentence}`}
-                                            target="_blank"
-                                            rel="nofollow"
-                                            className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                        >
-                                            <YandexIcon />
-                                        </a>
-                                    </Button>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+
+
+            <div>
+                {tableHead}
+                {itemsFiltered?.map((item: any) => tableBodyItem(item, actions(item)))}
+            </div>
+
+            <div className="flex w-full justify-center">
+                <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="secondary"
+                    page={page}
+                    total={Math.ceil(itemsFiltered.length / rowsPerPage)}
+                    onChange={(page) => setPage(page)}
+                />
+            </div>
         </div>
     )
 }

@@ -6,7 +6,7 @@ import {showPopup} from "~/redux/action-creaters/popup";
 import {popupTypes} from "~/redux/reducers/popupReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {ThemeSwitch} from "~/components/theme-switch";
-import {Avatar, Button, User} from "@nextui-org/react";
+import {Avatar, Button, Link, User} from "@nextui-org/react";
 
 const links = [
     {
@@ -47,15 +47,14 @@ export default function Header({userData}: any) {
                     {userData && (
                         <div className={styles.Menu}>
                             {links.map(link => (
-                                <Button key={link.link} color={router.pathname.includes(link.link) ? 'secondary' : 'default'} onClick={() => {
-                                    router.push(link.link);
-                                }}>{link.name} {link.link.includes('learn') && `(${learningWordIds.length})`}</Button>
+                                <Link key={link.link} color={router.pathname.includes(link.link) ? 'secondary' : 'foreground'} href={link.link}>
+                                    {link.name} {link.link.includes('learn') && `(${learningWordIds.length})`}
+                                </Link>
                             ))}
                         </div>
                     )}
 
                     <div className='flex gap-4'>
-                        <ThemeSwitch />
                         {!!userData ? (<User
                             name={userData['name']}
                             avatarProps={{

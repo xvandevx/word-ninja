@@ -1,6 +1,6 @@
 import styles from './index.module.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {useMemo, useState, useCallback} from "react";
+import {useMemo, useState, useCallback, useEffect} from "react";
 import {
     Table,
     TableHeader,
@@ -30,9 +30,9 @@ export default function ContentTable({
     categorys,
     handleDeleteItem,
     handleGetItems,
-    columns,
     tableHead,
-    tableBodyItem
+    tableBodyItem,
+    setCurrentIds = () => {}
 }: any) {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
@@ -47,6 +47,7 @@ export default function ContentTable({
     const [statusFilter, setStatusFilter] = useState([]);
 
     const onRowsPerPageChange = useCallback((e: { target: { value: any; }; }) => {
+        setPage(1)
         setRowsPerPage(Number(e.target.value));
     }, []);
 
@@ -77,6 +78,10 @@ export default function ContentTable({
     const wordsFilteredPaged = useMemo(() => {
         return itemsFiltered.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage);
     }, [itemsFiltered, page, rowsPerPage]);
+
+    useEffect(() => {
+        setCurrentIds(wordsFilteredPaged.map((item: any) => item.id))
+    }, [wordsFilteredPaged]);
 
     const actions = (item: any) => <>
         <Button variant="light" disableAnimation={true} size="sm"  onClick={(e) => {
@@ -228,20 +233,22 @@ export default function ContentTable({
 
             <div>
                 {tableHead}
-                {itemsFiltered?.map((item: any) => tableBodyItem(item, actions(item)))}
+                {wordsFilteredPaged?.map((item: any) => tableBodyItem(item, actions(item)))}
             </div>
 
-            <div className="flex w-full justify-center">
-                <Pagination
-                    isCompact
-                    showControls
-                    showShadow
-                    color="secondary"
-                    page={page}
-                    total={Math.ceil(itemsFiltered.length / rowsPerPage)}
-                    onChange={(page) => setPage(page)}
-                />
-            </div>
+            {itemsFiltered.length > rowsPerPage && (
+                <div className="flex w-full justify-center">
+                    <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="secondary"
+                        page={page}
+                        total={Math.ceil(itemsFiltered.length / rowsPerPage)}
+                        onChange={(page) => setPage(page)}
+                    />
+                </div>
+            )}
         </div>
     )
 }

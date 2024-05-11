@@ -9,6 +9,8 @@ import {getWords} from "~/redux/action-creaters/word";
 import {WordStatuses} from "~/types/words/word";
 import {WordStatusNames} from "~/types/words/wordFe";
 import styles from "./index.module.scss";
+import {GoogleIcon} from "~/components/icons/google";
+import {YandexIcon} from "~/components/icons/yandex";
 
 export default function AddWord({onHide}: any) {
     const [result, setResult]: any = useState({status: `${WordStatuses.NewWord}`});
@@ -109,11 +111,51 @@ export default function AddWord({onHide}: any) {
                     onValueChange={async (value: any) => {
                         setResult({...result, 'word': value})
                     }}
+                    endContent={
+                        <div className='flex gap-2'>
+                            <a
+                                href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${result.word}%0A&op=translate`}
+                                target="_blank"
+                                rel="nofollow"
+                                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                            >
+                                <GoogleIcon />
+                            </a>
+                            <a
+                                href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${result.word}`}
+                                target="_blank"
+                                rel="nofollow"
+                                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                            >
+                                <YandexIcon />
+                            </a>
+                        </div>
+                    }
                 />
                 <Input
                     label="Translation"
                     value={result.translation}
                     onValueChange={(value: any) => setResult({...result, 'translation': value})}
+                    endContent={
+                        <div className='flex gap-2'>
+                            <a
+                                href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${result.translation}%0A&op=translate`}
+                                target="_blank"
+                                rel="nofollow"
+                                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                            >
+                                <GoogleIcon />
+                            </a>
+                            <a
+                                href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${result.translation}`}
+                                target="_blank"
+                                rel="nofollow"
+                                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                            >
+                                <YandexIcon />
+                            </a>
+                        </div>
+                    }
                 />
                 {translations.length > 0 && <div className={styles.Translations}>
                     {Array.isArray(translations) && translations.map((word: any) => (

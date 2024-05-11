@@ -25,12 +25,7 @@
 .Menu {
     display: flex;
     gap: 15px;
-    a {
-        padding: 10px 15px;
-        border-radius: 15px;
-        background-color: #3d3b3b;
-        color: #fff;
-    }
+
 }
 
 .Selected {
@@ -58,5 +53,13 @@
     }
     .Header {
         padding-bottom: 80px;
+    }
+
+    .Logo {
+        font-size: 12px;
+
+        img {
+            width: 20px;
+        }
     }
 }

@@ -10,6 +10,7 @@ import {getWords} from "~/redux/action-creaters/word";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import clsx from "clsx";
+import {setLearnedWords, setLearningWords} from "~/redux/action-creaters/learn";
 
 export default function WordsComponent() {
     const dispatch = useDispatch();
@@ -26,19 +27,24 @@ export default function WordsComponent() {
         return categorysByIds;
     }, [wordCategorys])
 
-    const selectedKeyIds: number[] = useMemo(() => {
+    const selectedKeyIds: any = useMemo(() => {
         // @ts-ignore
-        return Object.values(selectedKeys).filter((item: boolean) => item);
+        return Object.keys(selectedKeys).filter((id: number) => selectedKeys[id]);
     }, [selectedKeys])
 
     const isAllSelected = useMemo(() => {
         return selectedKeyIds.length === words.length
     }, [selectedKeyIds, words])
 
+    const [currentIds, setCurrentIds]: any = useState([]);
+
     // @ts-ignore
     return (
         <>
             <ContentTable
+                setCurrentIds={(currentIds: any) => {
+                    setCurrentIds(currentIds)
+                }}
                 items={words}
                 name='word'
                 categorys={wordCategorys}
@@ -55,9 +61,9 @@ export default function WordsComponent() {
                         <div><Checkbox isSelected={isAllSelected} onChange={() => {
                             if (!isAllSelected) {
                                 const selectedKeys = {};
-                                words.map((item: any) => {
+                                currentIds.map((item: any) => {
                                     // @ts-ignore
-                                    selectedKeys[item.id] = true;
+                                    selectedKeys[item] = true;
                                 })
                                 setSelectedKeys(selectedKeys)
                             } else {

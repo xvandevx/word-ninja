@@ -45,13 +45,13 @@ export default function AddWord({onHide}: any) {
                 await Api.words.update(data.id, {
                     ...result,
                     word: result.word.toLowerCase().trim(),
-                    translation: result.translation.toLowerCase().trim(),
+                    translation: result.translation?.toLowerCase().trim(),
                 });
             } else {
                 await Api.words.add({
                     ...result,
                     word: result.word.toLowerCase().trim(),
-                    translation: result.translation.toLowerCase().trim(),
+                    translation: result.translation?.toLowerCase().trim(),
                 });
             }
             // @ts-ignore

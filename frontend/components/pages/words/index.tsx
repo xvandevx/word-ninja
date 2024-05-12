@@ -1,6 +1,6 @@
 import ContentTable from "../../common/contentTable";
 import styles from "./index.module.scss";
-import {Button, Checkbox, Chip} from "@nextui-org/react";
+import {Button, Chip} from "@nextui-org/react";
 import {useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
@@ -11,6 +11,7 @@ import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import clsx from "clsx";
 import {setLearnedWords, setLearningWords} from "~/redux/action-creaters/learn";
+import Checkbox from "~/components/common/checkbox";
 
 export default function WordsComponent() {
     const dispatch = useDispatch();
@@ -29,16 +30,15 @@ export default function WordsComponent() {
 
     const selectedKeyIds: any = useMemo(() => {
         // @ts-ignore
-        return Object.keys(selectedKeys).filter((id: number) => selectedKeys[id]);
+        return Object.keys(selectedKeys).filter((id: number) => selectedKeys[id]) || [];
     }, [selectedKeys])
-
-    const isAllSelected = useMemo(() => {
-        return selectedKeyIds.length === words.length
-    }, [selectedKeyIds, words])
 
     const [currentIds, setCurrentIds]: any = useState([]);
 
-    // @ts-ignore
+    const isAllSelected = useMemo(() => {
+        return selectedKeyIds.length === currentIds.length
+    }, [selectedKeyIds, currentIds])
+
     return (
         <>
             <ContentTable
@@ -58,7 +58,8 @@ export default function WordsComponent() {
                 addItemPopupType={popupTypes.addWord}
                 tableHead={
                     <div className={clsx(styles.TableHead, styles.TableGrid)}>
-                        <div><Checkbox isSelected={isAllSelected} onChange={() => {
+                        <div><Checkbox isChecked={isAllSelected} onChange={() => {
+                            console.log('asdad1', isAllSelected)
                             if (!isAllSelected) {
                                 const selectedKeys = {};
                                 currentIds.map((item: any) => {
@@ -69,6 +70,7 @@ export default function WordsComponent() {
                             } else {
                                 setSelectedKeys({})
                             }
+                            console.log('asdad', selectedKeys, selectedKeyIds, currentIds)
                         }}/></div>
                         <div>Word</div>
                         <div>Translation</div>
@@ -81,7 +83,7 @@ export default function WordsComponent() {
                     <div className={clsx(styles.TableItem, styles.TableGrid)} onClick={(e) => {
                         setSelectedKeys({...selectedKeys, [item.id]: !selectedKeys[item.id]})
                     }}>
-                        <div><Checkbox isSelected={selectedKeys[item.id]} isReadOnly={true}/> </div>
+                        <div><Checkbox isChecked={selectedKeys[item.id]} isReadOnly={true}/> </div>
                         <div>
                             <div className='flex'>
                                 <span>{item.word}</span>

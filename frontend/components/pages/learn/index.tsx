@@ -19,6 +19,7 @@ export default function LearnComponent() {
     const [currentWordKey, setCurrentWordKey] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowTranslation, setIsShowTranslation] = useState(false);
+    const [learnType, setLearnType] = useState(true);
 
     const currentLearningWordId = useMemo(() => {
         return +learningWordIds[currentWordKey];
@@ -38,22 +39,14 @@ export default function LearnComponent() {
     }, [currentLearningWordId, word])
 
     const setNextWord = () => {
+        setIsShowTranslation(false);
         if (currentWordKey === (learningWordIds.length - 1)) {
             setCurrentWordKey(0)
         } else {
             setCurrentWordKey(currentWordKey + 1)
         }
-        setIsShowTranslation(false);
     }
 
-    const [statusFilter, setStatusFilter] = useState([]);
-
-    const statusFilterArray = useMemo(() => {
-        return [...statusFilter].map(item => +item);
-    }, [statusFilter])
-
-    // @ts-ignore
-    // @ts-ignore
     return (
         <div>
             {learningWordIds.length === 0 && (
@@ -81,8 +74,6 @@ export default function LearnComponent() {
                             <DropdownMenu
                                 aria-label="Table Columns"
                                 selectedKeys={new Set([word.status])}
-                                closeOnSelect={false}
-                                selectionMode="multiple"
                                 onSelectionChange={async (status) => {
 
                                     await Api.words.update(word.id, {
@@ -112,54 +103,71 @@ export default function LearnComponent() {
                             classNames="fade-up"
                             unmountOnExit
                         >
-                            <div className={styles.Word}>{word.word}</div>
+                            <div className={styles.Word}>
+                                {learnType ? word.word : word.translation}
+
+                                <a
+                                    href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${learnType ? word.word : word.translation}%0A&op=translate`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <GoogleIcon size={24}/>
+                                </a>
+                                <a
+                                    href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${word.word}`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <YandexIcon size={24}/>
+                                </a>
+                            </div>
                         </CSSTransition>
 
-                        <CSSTransition
-                            in={isShowTranslation}
-                            timeout={500}
-                            classNames="fade-up"
-                            unmountOnExit
-                        >
-                            <div className={styles.Translation}>{word.translation}</div>
-                        </CSSTransition>
+                        {isShowTranslation && (
+                            <div className={styles.Translation}>
+                                {learnType ? word.translation : word.word}
+                                <a
+                                    href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${learnType ? word.translation : word.word}%0A&op=translate`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <GoogleIcon size={24}/>
+                                </a>
+                                <a
+                                    href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${learnType ? word.translation : word.word}`}
+                                    target="_blank"
+                                    rel="nofollow"
+                                    className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                                >
+                                    <YandexIcon size={24}/>
+                                </a>
+                            </div>)}
                         {!isShowTranslation && <Button onClick={() => {
                             setIsShowTranslation(true)
                         }}>Show translation</Button>}
 
                         <div>
-                            <div className='flex justify-end'>
+                            <div className='flex gap-2 justify-center'>
 
-                                <Button variant="light" disableAnimation={true} size="sm" className={styles.Button}>
-                                    <a
-                                        href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${word.word}%0A&op=translate`}
-                                        target="_blank"
-                                        rel="nofollow"
-                                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                    >
-                                        <GoogleIcon />
-                                    </a>
-                                </Button>
-                                <Button variant="light" disableAnimation={true} size="sm" className={styles.Button}>
-                                    <a
-                                        href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${word.word}`}
-                                        target="_blank"
-                                        rel="nofollow"
-                                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                    >
-                                        <YandexIcon />
-                                    </a>
-                                </Button>
                             </div>
-                            <div className='flex justify-center mt-3'>
+                            <div className='flex justify-center mt-3  gap-2 '>
 
                                 <Button disableAnimation={true} className={styles.Button} onClick={(e) => {
                                     // @ts-ignore
                                     dispatch(showPopup(popupTypes.addWord, word));
                                 }}>
-                                         <span className="text-lg text-default-400 cursor-pointer active:opacity-50" >
+                                         <span className="text-lg text-default-400 cursor-pointer " >
                                             <EditIcon />
                                         </span>
+                                </Button>
+
+                                <Button disableAnimation={true} className={styles.Button} onClick={(e) => {
+                                    setLearnType(!learnType)
+                                }}>
+                                       Change learn type
                                 </Button>
                             </div>
                         </div>

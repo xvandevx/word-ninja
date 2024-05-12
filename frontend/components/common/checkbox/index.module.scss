@@ -1,0 +1,40 @@
+.Checkbox {
+    display: flex;
+    gap: 15px;
+    cursor: pointer;
+    
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            .Box {
+                border-color: #4175d2;
+            }
+        }
+    }
+}
+
+.Box {
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #D5D7E6;
+    border-radius: 5px;
+    transition: 0.3s;
+
+    &Checked {
+        background-color: #4175d2;
+        border-color: #4175d2;
+        position: relative;
+        &:before {
+            position: absolute;
+            content: '';
+            left: 4px;
+            top: 5px;
+            width: 10px;
+            height: 6px;
+            border-radius: 1px;
+            border-left: 3px solid #fff;
+            border-bottom: 3px solid #fff;
+            transform: rotate(-45deg);
+        }
+    }
+}

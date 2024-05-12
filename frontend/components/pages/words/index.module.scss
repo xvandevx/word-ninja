@@ -66,6 +66,12 @@
     padding: 10px 20px;
     font-size: 12px;
   }
+
+  &Wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 }
 
 .Pluses {
@@ -104,14 +110,18 @@
     background-color: #18181b;
     border-radius: 5px;
     margin-bottom: 5px;
-    grid-template-columns: 60px 1fr 1fr 80px;
+    grid-template-columns: 40px 1fr 1fr 60px;
     padding-bottom: 30px;
+
+    > div {
+      padding: 10px 10px;
+      position: relative;
+    }
   }
 
   .TableGrid {
 
     > div {
-      text-align: center;
       gap: 10px;
     }
   }

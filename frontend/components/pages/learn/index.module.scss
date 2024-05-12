@@ -8,7 +8,7 @@
 }
 
 .Learn {
-  height: 80vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,4 +35,11 @@
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+@media only screen and (max-width: 991px) {
+  .Learn {
+    height: calc(100vh - 300px);
+    font-size: 30px;
+  }
 }

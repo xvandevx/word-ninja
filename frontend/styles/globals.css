@@ -44,3 +44,9 @@ body {
         padding: 0 25px;
     }
 }
+
+@media only screen and (max-width: 761px) {
+    .container {
+        padding: 0 10px;
+    }
+}

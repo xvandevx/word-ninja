@@ -12,6 +12,7 @@ import {YandexIcon} from "~/components/icons/yandex";
 import clsx from "clsx";
 import {setLearnedWords, setLearningWords} from "~/redux/action-creaters/learn";
 import Checkbox from "~/components/common/checkbox";
+import {ChevronDownIcon} from "@nextui-org/shared-icons";
 
 export default function WordsComponent() {
     const dispatch = useDispatch();
@@ -57,9 +58,10 @@ export default function WordsComponent() {
                 }}
                 addItemPopupType={popupTypes.addWord}
                 tableHead={
-                    <div className={clsx(styles.TableHead, styles.TableGrid)}>
-                        <div><Checkbox isChecked={isAllSelected} onChange={() => {
-                            console.log('asdad1', isAllSelected)
+                    <div className={styles.TableHeadWrapper}>
+                        <Button
+                            color={isAllSelected ? 'primary' : 'default'} variant='bordered' size="sm"
+                            onClick={() => {
                             if (!isAllSelected) {
                                 const selectedKeys = {};
                                 currentIds.map((item: any) => {
@@ -70,13 +72,28 @@ export default function WordsComponent() {
                             } else {
                                 setSelectedKeys({})
                             }
-                            console.log('asdad', selectedKeys, selectedKeyIds, currentIds)
-                        }}/></div>
-                        <div>Word</div>
-                        <div>Translation</div>
-                        <div>Status</div>
-                        <div>Categories</div>
-                        <div></div>
+                        }}>
+                            {isAllSelected ? 'Deselect' : 'Select'} all words
+                        </Button>
+                        <div className={clsx(styles.TableHead, styles.TableGrid)}>
+                            <div><Checkbox isChecked={isAllSelected} onChange={() => {
+                                if (!isAllSelected) {
+                                    const selectedKeys = {};
+                                    currentIds.map((item: any) => {
+                                        // @ts-ignore
+                                        selectedKeys[item] = true;
+                                    })
+                                    setSelectedKeys(selectedKeys)
+                                } else {
+                                    setSelectedKeys({})
+                                }
+                            }}/></div>
+                            <div>Word</div>
+                            <div>Translation</div>
+                            <div>Status</div>
+                            <div>Categories</div>
+                            <div></div>
+                        </div>
                     </div>
                 }
                 tableBodyItem={(item: any, actions: any) =>

@@ -10,6 +10,7 @@ export default function MainLayout({children, userData}: any) {
         <div>
             <Head>
                 <title>Word-ninja</title>
+                <meta name="viewport" content="width=device-width, user-scalable=no" />
             </Head>
             <Header userData={userData}/>
             <div className='container'>

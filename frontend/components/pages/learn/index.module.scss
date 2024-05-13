@@ -43,3 +43,10 @@
     font-size: 30px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .Learn {
+    height: calc(100vh - 300px);
+    font-size: 24px;
+  }
+}

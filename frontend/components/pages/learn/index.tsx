@@ -47,6 +47,14 @@ export default function LearnComponent() {
         }
     }
 
+    const {visibleType} = useSelector((state: any) => state.popup)
+
+    useEffect(() => {
+        if (currentLearningWordId && visibleType === popupTypes.none) {
+            getWord();
+        }
+    }, [visibleType, currentLearningWordId]);
+
     return (
         <div>
             {learningWordIds.length === 0 && (
@@ -60,7 +68,7 @@ export default function LearnComponent() {
                         </div>
 
                         <Dropdown>
-                            <DropdownTrigger className="hidden sm:flex">
+                            <DropdownTrigger className="flex">
                                 <Button
                                     endContent={<ChevronDownIcon className="text-small" />}
                                     variant="flat"
@@ -72,10 +80,10 @@ export default function LearnComponent() {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
-                                aria-label="Table Columns"
+                                disallowEmptySelection
+                                selectionMode="single"
                                 selectedKeys={new Set([word.status])}
                                 onSelectionChange={async (status) => {
-
                                     await Api.words.update(word.id, {
                                         // @ts-ignore
                                         status: {...status}.currentKey
@@ -145,7 +153,7 @@ export default function LearnComponent() {
                                     <YandexIcon size={24}/>
                                 </a>
                             </div>)}
-                        {!isShowTranslation && <Button onClick={() => {
+                        {((learnType && word.translation) || (!learnType && word.word)) && !isShowTranslation && <Button onClick={() => {
                             setIsShowTranslation(true)
                         }}>Show translation</Button>}
 

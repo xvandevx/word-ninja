@@ -214,7 +214,7 @@ export default function ContentTable({
                     </div>
                 )}
             </div>
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex justify-between items-center">
                 <span className="text-default-400 text-small">Total: {itemsFiltered?.length}</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
@@ -237,7 +237,7 @@ export default function ContentTable({
             </div>
 
             {itemsFiltered.length > rowsPerPage && (
-                <div className="flex w-full justify-center">
+                <div className="flex w-full justify-center mb-10 mt-10">
                     <Pagination
                         isCompact
                         showControls

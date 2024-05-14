@@ -33,5 +33,5 @@ export enum WordStatuses {
     'RepeatingSixMonth',
     'RepeatedSixMonth',
     'RepeatingYear',
-    'RepeatedYear',
+    'FinallyLearned',
 }

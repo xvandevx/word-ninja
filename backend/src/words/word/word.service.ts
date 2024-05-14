@@ -60,9 +60,7 @@ export class WordService {
 
   async setPlus(id: number, userId) {
     const word = await this.wordRepository.findByPk(id);
-    console.log(word.dataValues.userId, userId)
     if (word.dataValues.userId === userId) {
-      console.log(word.dataValues)
       await word.update({
         pluses: word.dataValues.pluses + 1,
       });
@@ -81,6 +79,7 @@ export class WordService {
   async getAll(userId) {
     return await this.wordRepository.findAll({
       where: { userId },
+      order: [['id', 'desc']],
       include: [{
         model: Category,
         attributes: ['id'],
@@ -100,7 +99,6 @@ export class WordService {
   async delete(id, userId) {
     const row = await this.wordRepository.findOne({
       where: { id, userId },
-      order: [['id', 'ASC']],
     });
     if (row) {
       await row.destroy(); // deletes the row

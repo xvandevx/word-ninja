@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import styles from './index.module.scss'
 import {CSSTransition} from 'react-transition-group';
 import {useRouter} from "next/router";
-import {showPopup} from "~/redux/action-creaters/popup";
-import {popupTypes} from "~/redux/reducers/popupReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {ThemeSwitch} from "~/components/theme-switch";
 import {Avatar, Button, Link, User} from "@nextui-org/react";
+import {WordStatuses} from "~/types/words/word";
 
 const links = [
     {
@@ -30,7 +28,15 @@ export default function Header({userData}: any) {
     useEffect(() => {
         setIsShow(true);
     }, []);
-    const {learningWordIds, learnedWordIds} = useSelector((state: any) => state.learn)
+
+    const {words} = useSelector((state: any) => state.word)
+
+    const learningWordsCount = useMemo(() => {
+
+        return words.filter((word: any) => {
+            return [WordStatuses.Learning, WordStatuses.RepeatingMonth, WordStatuses.RepeatingSixMonth, WordStatuses.RepeatingYear].includes(word.status)
+        }).length;
+    }, [words]);
 
     return (
         <header className='container'>
@@ -48,7 +54,7 @@ export default function Header({userData}: any) {
                         <div className={styles.Menu}>
                             {links.map(link => (
                                 <Link key={link.link} color={router.pathname.includes(link.link) ? 'secondary' : 'foreground'} href={link.link}>
-                                    {link.name} {link.link.includes('learn') && `(${learningWordIds.length})`}
+                                    {link.name} {link.link.includes('learn') && `(${learningWordsCount})`}
                                 </Link>
                             ))}
                         </div>

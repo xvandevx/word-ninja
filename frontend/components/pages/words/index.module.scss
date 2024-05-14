@@ -61,6 +61,7 @@
 .TableHead {
   background-color: #18181b;
   border-radius: 5px;
+  width: 100%;
 
   > div {
     padding: 10px 20px;
@@ -71,6 +72,10 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+
+    > Button {
+      display: none;
+    }
   }
 }
 

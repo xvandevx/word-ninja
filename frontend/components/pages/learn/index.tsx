@@ -12,55 +12,43 @@ import {DeleteUser} from "~/components/common/detele";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {popupTypes} from "~/redux/reducers/popupReducer";
+import {WordStatuses} from "~/types/words/word";
+import {getWords} from "~/redux/action-creaters/word";
 export default function LearnComponent() {
     const dispatch = useDispatch();
-    const {learningWordIds, learnedWordIds} = useSelector((state: any) => state.learn)
-    const [word, setWord]: any = useState({});
     const [currentWordKey, setCurrentWordKey] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowTranslation, setIsShowTranslation] = useState(false);
     const [learnType, setLearnType] = useState(true);
 
-    const currentLearningWordId = useMemo(() => {
-        return +learningWordIds[currentWordKey];
-    }, [learningWordIds, currentWordKey])
+    const {words} = useSelector((state: any) => state.word)
 
-    const getWord = async () => {
-        setIsLoading(true);
-        const word = await Api.words.getById(currentLearningWordId)
-        setWord(word[0])
-        setIsLoading(false);
-    }
+    const learningWords = useMemo(() => {
+        return words.filter((word: any) => {
+            return [WordStatuses.Learning, WordStatuses.RepeatingMonth, WordStatuses.RepeatingSixMonth, WordStatuses.RepeatingYear].includes(word.status)
+        });
+    }, [words]);
 
-    useEffect(() => {
-        if (currentLearningWordId && !isLoading && currentLearningWordId !== +word.id) {
-            getWord();
-        }
-    }, [currentLearningWordId, word])
+    const word = useMemo(() => {
+        return learningWords[currentWordKey] || {};
+    }, [learningWords, currentWordKey])
 
     const setNextWord = () => {
         setIsShowTranslation(false);
-        if (currentWordKey === (learningWordIds.length - 1)) {
+        console.log('afasfa', currentWordKey, learningWords.length, learningWords.length - 1)
+        if (currentWordKey >= (learningWords.length - 1)) {
             setCurrentWordKey(0)
         } else {
             setCurrentWordKey(currentWordKey + 1)
         }
     }
 
-    const {visibleType} = useSelector((state: any) => state.popup)
-
-    useEffect(() => {
-        if (currentLearningWordId && visibleType === popupTypes.none) {
-            getWord();
-        }
-    }, [visibleType, currentLearningWordId]);
-
     return (
         <div>
-            {learningWordIds.length === 0 && (
+            {learningWords.length === 0 && (
                 <div>No words to learn</div>
             )}
-            {learningWordIds.length > 0 && (
+            {learningWords.length > 0 && (
                 <>
                     <div className='flex justify-between'>
                         <div className={styles.Counter}>
@@ -88,7 +76,8 @@ export default function LearnComponent() {
                                         // @ts-ignore
                                         status: {...status}.currentKey
                                     });
-                                    await getWord();
+                                    // @ts-ignore
+                                    await dispatch(getWords());
                                 }}
                             >
                                 {Object.keys(WordStatusNames).map((status: string) => (
@@ -183,24 +172,31 @@ export default function LearnComponent() {
 
                     <div className={styles.PanelWrapper}>
                         <div className={styles.Panel}>
-                            <Button color="success" onClick={() => {
-                                Api.words.setPlus(word.id)
+                            <Button color="success" onClick={async () => {
+                                await Api.words.setPlus(word.id);
+                                // @ts-ignore
+                                await dispatch(getWords());
                                 setNextWord();
                             }}>Plus ({word.pluses})</Button>
-                            <Button color="danger" onClick={() => {
-                                Api.words.setMinus(word.id)
+                            <Button color="danger" onClick={async () => {
+                                await Api.words.setMinus(word.id)
+                                // @ts-ignore
+                                await dispatch(getWords());
                                 setNextWord();
                             }}>Minus ({word.minuses})</Button>
                             <Button onClick={() => {
                                 setNextWord();
                             }}>Skip</Button>
-                            <Button color="secondary" onClick={() => {
+                            <Button color="secondary" onClick={async () => {
                                 // @ts-ignore
-                                dispatch(setLearningWords(learningWordIds.filter(wordId => wordId != currentLearningWordId)));
+                                console.log('test updadad', word)
+                                await Api.words.update(word.id, {
+                                    status: (+word.status + 1),
+                                });
                                 // @ts-ignore
-                                dispatch(setLearnedWords([...learnedWordIds, currentLearningWordId]));
+                                await dispatch(getWords());
                                 setNextWord();
-                            }}>Learned ({learnedWordIds.length})</Button>
+                            }}>Learned</Button>
                         </div>
                     </div>
                 </>

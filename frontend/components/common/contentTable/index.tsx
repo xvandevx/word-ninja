@@ -137,7 +137,7 @@ export default function ContentTable({
                     }}
                     onValueChange={(value) => {
                         if (value) {
-                            setFilterValue(value);
+                            setFilterValue(value.toLowerCase());
                             setPage(1);
                         } else {
                             setFilterValue("");
@@ -237,7 +237,7 @@ export default function ContentTable({
             </div>
 
             {itemsFiltered.length > rowsPerPage && (
-                <div className="flex w-full justify-center mb-10 mt-10">
+                <div className="flex w-full justify-center mb-10 mt-15">
                     <Pagination
                         isCompact
                         showControls

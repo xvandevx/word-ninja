@@ -18,7 +18,7 @@ import {GoogleStrategy} from "./strategies/google.strategy";
       global: true,
       secret: process.env.PRIVATE_KEY || 'SECRET',
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: '10d',
       },
     }),
   ],

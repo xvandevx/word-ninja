@@ -1,7 +1,7 @@
 import ContentTable from "../../common/contentTable";
 import styles from "./index.module.scss";
 import {Button, Chip} from "@nextui-org/react";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
 import {popupTypes} from "~/redux/reducers/popupReducer";
@@ -10,9 +10,8 @@ import {getWords} from "~/redux/action-creaters/word";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import clsx from "clsx";
-import {setLearnedWords, setLearningWords} from "~/redux/action-creaters/learn";
 import Checkbox from "~/components/common/checkbox";
-import {ChevronDownIcon} from "@nextui-org/shared-icons";
+import {WordStatuses} from "~/types/words/word";
 
 export default function WordsComponent() {
     const dispatch = useDispatch();
@@ -153,11 +152,12 @@ export default function WordsComponent() {
             selectedKeyIds.length > 0 && (
                 <div className={styles.PanelWrapper}>
                     <div className={styles.Panel}>
-                        <Button onClick={() => {
-                            // @ts-ignore
-                            dispatch(setLearningWords(selectedKeyIds));
-                            // @ts-ignore
-                            dispatch(setLearnedWords([]));
+                        <Button onClick={async () => {
+                            for (const id of selectedKeyIds) {
+                                await Api.words.update(id, {
+                                    status: WordStatuses.Learning,
+                                });
+                            }
                             window.location.href = '/learn'
                         }}>Learn {
                             // @ts-ignore

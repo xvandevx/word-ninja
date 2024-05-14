@@ -10,6 +10,7 @@ export default function PopupFormWrapper({
     title = '',
     isLoading = false,
     onSubmit = () => {},
+    additionalButton = null,
     errorText = '',
     children,
     topText = ''
@@ -35,7 +36,8 @@ export default function PopupFormWrapper({
             </div>
             <div className={styles.Buttom}>
                 <Button onClick={onSubmit} isLoading={isLoading} isDisabled={isLoading}>Submit</Button>
-                <Button onClick={onHide} isDisabled={isLoading}>Cancel</Button>
+                {additionalButton}
+                <Button onClick={onHide} isDisabled={isLoading} variant="bordered">Cancel</Button>
             </div>
         </>
     )

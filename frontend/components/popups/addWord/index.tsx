@@ -23,7 +23,7 @@ export default function AddWord({onHide}: any) {
 
     const {wordCategorys} = useSelector((state: any) => state.category)
 
-    const submit = async () => {
+    const submit = async (closePopup = true) => {
         setError('');
 
         const existingWord = words.find((word: any) => word.word === result.word);
@@ -44,20 +44,23 @@ export default function AddWord({onHide}: any) {
             if (data.id) {
                 await Api.words.update(data.id, {
                     ...result,
-                    word: result.word.toLowerCase().trim(),
+                    word: result.word?.toLowerCase().trim(),
                     translation: result.translation?.toLowerCase().trim(),
                 });
             } else {
                 await Api.words.add({
                     ...result,
-                    word: result.word.toLowerCase().trim(),
+                    word: result.word?.toLowerCase().trim(),
                     translation: result.translation?.toLowerCase().trim(),
                 });
             }
             // @ts-ignore
             await dispatch(getWords());
-            // @ts-ignore
-            await dispatch(showPopup(popupTypes.none))
+
+            if (closePopup) {
+                // @ts-ignore
+                await dispatch(showPopup(popupTypes.none))
+            }
         } catch (e: any) {
             if (e.message.includes("401")) {
                 setError('Error');
@@ -65,6 +68,7 @@ export default function AddWord({onHide}: any) {
                 setError(e.message);
             }
         }
+        setResult({status: `${WordStatuses.NewWord}`, word: '', translation: ''});
         setLoading(false)
     }
 
@@ -103,6 +107,11 @@ export default function AddWord({onHide}: any) {
             isLoading={isLoading}
             onSubmit={submit}
             errorText={error}
+            additionalButton={!data?.id &&
+                <Button onClick={() => {
+                    submit(false);
+                }} isLoading={isLoading} isDisabled={isLoading}>Add +1</Button>
+            }
         >
             <>
                 <Input

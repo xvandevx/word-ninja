@@ -64,8 +64,18 @@ export default function ContentTable({
         return [...statusFilter].map(item => +item);
     }, [statusFilter])
 
+    const itemsFormated = useMemo(() => {
+        return items.map((item: any) => {
+            const date = new Date(item.createdAt);
+            return {
+                ...item,
+                date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+            }
+        })
+    }, [items])
+
     const itemsFiltered = useMemo(() => {
-        return items.filter((item: any) => {
+        return itemsFormated.filter((item: any) => {
             if (!selectedCategory) {
                 return true;
             }
@@ -73,7 +83,7 @@ export default function ContentTable({
         }).filter((item: any) => {
             return statusFilterArray.length === 0 || statusFilterArray.includes(item.status);
         }).filter((item: any) => !filterValue || item.word?.includes(filterValue) || item.translation?.includes(filterValue) || item.sentence?.includes(filterValue))
-    }, [items, selectedCategory, statusFilterArray, filterValue])
+    }, [itemsFormated, selectedCategory, statusFilterArray, filterValue])
 
     const wordsFilteredPaged = useMemo(() => {
         return itemsFiltered.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage);

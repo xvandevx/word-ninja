@@ -58,6 +58,10 @@
   position: relative;
 }
 
+.TableDate {
+  font-size: 14px;
+}
+
 .TableHead {
   background-color: #18181b;
   border-radius: 5px;
@@ -90,7 +94,7 @@
 .TableGrid {
   display: grid;
   cursor: pointer;
-  grid-template-columns: 60px 1fr 1fr 150px 150px 200px;
+  grid-template-columns: 60px 120px 1fr 1fr 150px 150px 200px;
 
   > div {
     padding: 10px 20px;
@@ -108,6 +112,10 @@
 }
 
 @media only screen and (max-width: 991px) {
+  .TableDate {
+    position: absolute!important;
+    bottom: 30px;
+  }
   .TableHead {
     display: none;
   }

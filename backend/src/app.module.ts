@@ -7,15 +7,13 @@ import {Users} from "./users/users.model";
 import {AuthModule} from "./auth/auth.module";
 import {Word} from "./words/word/word.model";
 import {WordCategory} from "./category/word-category";
-import {WordTranslation} from "./words/translation/word-translation";
 import {WordModule} from "./words/word/word.module";
-import {WordTranslationModule} from "./words/translation/translation.module";
 import {CategoryModule} from "./category/category.module";
-import {Translation} from "./words/translation/translation.model";
 import {Category} from "./category/category.model";
 import {SentenceCategory} from "./category/sentence-category";
 import {Sentence} from "./sentences/sentense/sentence.model";
 import {SentenceModule} from "./sentences/sentense/sentence.module";
+import {TranslateModule} from "./translate/translate.module";
 
 @Module({
   imports: [
@@ -44,7 +42,8 @@ import {SentenceModule} from "./sentences/sentense/sentence.module";
     AuthModule,
     WordModule,
     CategoryModule,
-    SentenceModule
+    SentenceModule,
+    TranslateModule,
   ],
   controllers: [],
   providers: [

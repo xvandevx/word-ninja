@@ -7,6 +7,7 @@ import {getWordCategory} from "~/redux/action-creaters/category";
 import WordsComponent from "~/components/pages/words";
 import {Spinner} from "@nextui-org/react";
 import {CSSTransition} from 'react-transition-group';
+import {getSentences} from "~/redux/action-creaters/sentense";
 
 export default function Words({userData}: any) {
     const dispatch = useDispatch();
@@ -17,6 +18,8 @@ export default function Words({userData}: any) {
         if (!dataFetch.rendered) {
             // @ts-ignore
             await dispatch(getWords());
+            // @ts-ignore
+            await dispatch(getSentences());
             // @ts-ignore
             await dispatch(getWordCategory());
             setIsLoaded(true);

@@ -146,14 +146,22 @@ export default function AddWord({onHide}: any) {
                     value={result.translation}
                     onValueChange={(value: any) => setResult({...result, 'translation': value})}
                     endContent={
-                        <div className='flex gap-2'>
+                        <div className='flex gap-2 items-center content-center justify-items-center'>
+                            {result.word?.length > 2 && (
+                                <Button size="sm" color="warning" onClick={async () => {
+                                    const translate = await Api.translate.get(result.word, 'en', 'ru')
+                                    if (translate?.translations?.length > 0) {
+                                        setResult({...result, 'translation': translate.translations[0].text})
+                                    }
+                                }}>Translate</Button>
+                            )}
                             <a
                                 href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${result.translation}%0A&op=translate`}
                                 target="_blank"
                                 rel="nofollow"
                                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                             >
-                                <GoogleIcon />
+                                <GoogleIcon/>
                             </a>
                             <a
                                 href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${result.translation}`}
@@ -161,7 +169,7 @@ export default function AddWord({onHide}: any) {
                                 rel="nofollow"
                                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                             >
-                                <YandexIcon />
+                                <YandexIcon/>
                             </a>
                         </div>
                     }

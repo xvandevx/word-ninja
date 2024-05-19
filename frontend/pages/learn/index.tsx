@@ -2,10 +2,10 @@ import MainLayout from "~/components/layouts/main";
 import {useDispatch} from "react-redux";
 import {useEffect, useRef, useState} from "react";
 import serverHandler from "~/utils/serverHandler";
-import {getLearnedWords, getLearningWords} from "~/redux/action-creaters/learn";
 import LearnComponent from "~/components/pages/learn";
 import {getWords} from "~/redux/action-creaters/word";
 import {getWordCategory} from "~/redux/action-creaters/category";
+import {getSentences} from "~/redux/action-creaters/sentense";
 
 
 export default function Sentences({userData}: any) {
@@ -17,6 +17,8 @@ export default function Sentences({userData}: any) {
         if (!dataFetch.rendered) {
             // @ts-ignore
             await dispatch(getWords());
+            // @ts-ignore
+            await dispatch(getSentences());
             // @ts-ignore
             await dispatch(getWordCategory());
             setIsLoaded(true);

@@ -87,6 +87,7 @@ export default function WordsComponent() {
                                     setSelectedKeys({})
                                 }
                             }}/></div>
+                            <div>Date</div>
                             <div>Word</div>
                             <div>Translation</div>
                             <div>Status</div>
@@ -100,6 +101,9 @@ export default function WordsComponent() {
                         setSelectedKeys({...selectedKeys, [item.id]: !selectedKeys[item.id]})
                     }}>
                         <div><Checkbox isChecked={selectedKeys[item.id]} isReadOnly={true}/> </div>
+                        <div className={styles.TableDate}>
+                            {item.date}
+                        </div>
                         <div>
                             <div className='flex'>
                                 <span>{item.word}</span>
@@ -126,7 +130,18 @@ export default function WordsComponent() {
                             <div className={styles.Pluses}>{item.pluses}/{item.minuses}</div>
 
                         </div>
-                        <div>{item.translation}</div>
+                        <div>{item.translation ? item.translation : (
+                            <Button size="sm" color="warning" onClick={async () => {
+                                const translate = await Api.translate.get(item.word, 'en', 'ru')
+                                if (translate?.translations?.length > 0) {
+                                    await Api.words.update(item.id, {
+                                        translation: translate.translations[0].text,
+                                    });
+                                    // @ts-ignore
+                                    await dispatch(getWords());
+                                }
+                            }}>Translate</Button>
+                        )}</div>
                         <div className={styles.Status}>
                             <Chip className="capitalize"  size="sm" variant="flat">
                                 {

@@ -29,12 +29,28 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  cursor: pointer;
 }
 
 .Translation {
   display: flex;
   gap: 10px;
   align-items: center;
+  cursor: pointer;
+}
+
+.Blured {
+  color: transparent;
+  text-shadow: 0 0 25px rgb(255 255 255 / 50%);
+}
+
+.Categoryes {
+  display: flex;
+  gap: 5px;
+}
+
+.Selector {
+  min-width: 150px;
 }
 
 @media only screen and (max-width: 991px) {

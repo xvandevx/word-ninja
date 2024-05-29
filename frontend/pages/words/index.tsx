@@ -8,19 +8,17 @@ import WordsComponent from "~/components/pages/words";
 import {Spinner} from "@nextui-org/react";
 import {CSSTransition} from 'react-transition-group';
 import {getSentences} from "~/redux/action-creaters/sentense";
+import {AppDispatch} from "~/redux";
 
 export default function Words({userData}: any) {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const dataFetch: any = useRef({ rendered: false})
     const [isLoaded, setIsLoaded] = useState(false);
 
     const loadData = async () => {
         if (!dataFetch.rendered) {
-            // @ts-ignore
             await dispatch(getWords());
-            // @ts-ignore
             await dispatch(getSentences());
-            // @ts-ignore
             await dispatch(getWordCategory());
             setIsLoaded(true);
         }

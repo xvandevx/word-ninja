@@ -6,20 +6,18 @@ import LearnComponent from "~/components/pages/learn";
 import {getWords} from "~/redux/action-creaters/word";
 import {getWordCategory} from "~/redux/action-creaters/category";
 import {getSentences} from "~/redux/action-creaters/sentense";
+import {AppDispatch} from "~/redux";
 
 
 export default function Sentences({userData}: any) {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const dataFetch: any = useRef({ rendered: false})
     const [isLoaded, setIsLoaded] = useState(false);
 
     const loadData = async () => {
         if (!dataFetch.rendered) {
-            // @ts-ignore
             await dispatch(getWords());
-            // @ts-ignore
             await dispatch(getSentences());
-            // @ts-ignore
             await dispatch(getWordCategory());
             setIsLoaded(true);
         }

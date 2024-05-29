@@ -9,12 +9,13 @@ import {getWordCategory} from "~/redux/action-creaters/category";
 import {showPopup} from "~/redux/action-creaters/popup";
 import {popupTypes} from "~/redux/reducers/popupReducer";
 import {CategoryTypesList} from "~/types";
+import {AppDispatch} from "~/redux";
 
 export default function AddCategory({onHide}: any) {
     const [result, setResult]: any = useState({type: '1'});
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const {data} = useSelector((state: any) => state.popup)
 
     const submit = async () => {
@@ -28,9 +29,7 @@ export default function AddCategory({onHide}: any) {
                 await Api.categorys.add(result);
             }
 
-            // @ts-ignore
             dispatch(getWordCategory());
-            // @ts-ignore
             dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {

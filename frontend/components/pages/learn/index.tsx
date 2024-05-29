@@ -22,6 +22,7 @@ import {WordStatuses} from "~/types/words/word";
 import {getWords} from "~/redux/action-creaters/word";
 import clsx from "clsx";
 import {EyeIcon} from "~/components/icons/eye";
+import {AppDispatch} from "~/redux";
 
 enum SortTypes {
     Asc = 'Asc',
@@ -37,7 +38,7 @@ enum LearnTypes {
 const Learns = [LearnTypes.EnRu, LearnTypes.RuEn];
 
 export default function LearnComponent() {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const [currentWordKey, setCurrentWordKey] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isShowTranslation, setIsShowTranslation] = useState(false);
@@ -229,7 +230,6 @@ export default function LearnComponent() {
                                                 // @ts-ignore
                                                 status: {...status}.currentKey
                                             });
-                                            // @ts-ignore
                                             await dispatch(getWords());
                                         }}
                                     >
@@ -262,13 +262,11 @@ export default function LearnComponent() {
                         <div className={styles.Panel}>
                             <Button color="success" onClick={async () => {
                                 await Api.words.setPlus(word.id);
-                                // @ts-ignore
                                 await dispatch(getWords());
                                 setNextWord();
                             }}>Plus ({word.pluses})</Button>
                             <Button color="danger" onClick={async () => {
                                 await Api.words.setMinus(word.id)
-                                // @ts-ignore
                                 await dispatch(getWords());
                                 setNextWord();
                             }}>Minus ({word.minuses})</Button>
@@ -276,12 +274,9 @@ export default function LearnComponent() {
                                 setNextWord();
                             }}>Skip</Button>
                             <Button color="secondary" onClick={async () => {
-                                // @ts-ignore
-                                console.log('test updadad', word)
                                 await Api.words.update(word.id, {
                                     status: (+word.status + 1),
                                 });
-                                // @ts-ignore
                                 await dispatch(getWords());
                                 setNextWord();
                             }}>Learned</Button>

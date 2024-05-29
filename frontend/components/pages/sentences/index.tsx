@@ -11,9 +11,10 @@ import ContentTable from "~/components/common/contentTable";
 import clsx from "clsx";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
+import {AppDispatch} from "~/redux";
 
 export default function SentencesComponent() {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const {sentences} = useSelector((state: any) => state.sentence)
     const {sentenceCategorys} = useSelector((state: any) => state.category)
     const {selectedCategory} = useSelector((state: any) => state.state)
@@ -23,7 +24,6 @@ export default function SentencesComponent() {
         // @ts-ignore
         await Api.sentences.delete(deleteItem.id);
         setDeleteItem(null);
-        // @ts-ignore
         dispatch(getSentences());
     }
 
@@ -47,7 +47,6 @@ export default function SentencesComponent() {
                     await Api.sentences.delete(itemId);
                 }}
                 handleGetItems={async () => {
-                    // @ts-ignore
                     await dispatch(getSentences());
                 }}
                 addItemPopupType={popupTypes.addSentence}

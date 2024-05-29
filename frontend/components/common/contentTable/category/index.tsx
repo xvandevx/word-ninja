@@ -11,17 +11,16 @@ import {DeleteUser} from "~/components/common/detele";
 import {Api} from "~/api";
 import {Accordion, AccordionItem} from "@nextui-org/react";
 import {getSentenceCategory, getWordCategory} from "~/redux/action-creaters/category";
+import {AppDispatch} from "~/redux";
 
 export default function Category({name, categorys, selectedCategory, setSelectedCategory}: any) {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const [deleteCategory, setDeleteCategory] = useState(null);
 
     const doDeleteCategory = async () => {
         await Api.categorys.delete(selectedCategory);
         setDeleteCategory(null);
-        // @ts-ignore
         dispatch(getWordCategory());
-        // @ts-ignore
         dispatch(getSentenceCategory());
         setSelectedCategory(null);
     }
@@ -36,7 +35,6 @@ export default function Category({name, categorys, selectedCategory, setSelected
                 {selectedCategory && (
                     <div className={styles.Buttons}>
                         <Button variant="light"  disableAnimation={true} size="sm" className={styles.Button} onClick={(e) => {
-                            // @ts-ignore
                             dispatch(showPopup(popupTypes.addCategory, categorys.find(item => item.id === selectedCategory)))
                         }}>
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50" >
@@ -77,7 +75,6 @@ export default function Category({name, categorys, selectedCategory, setSelected
                         </Button>
                     ))}
                     <Button size="sm" onClick={() => {
-                        // @ts-ignore
                         dispatch(showPopup(popupTypes.addCategory, {type: name === 'word' ? 1 : 2}))
                     }}>
                         Add new category

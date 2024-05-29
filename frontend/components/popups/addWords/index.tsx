@@ -11,6 +11,7 @@ import {popupTypes} from "~/redux/reducers/popupReducer";
 import {getWords} from "~/redux/action-creaters/word";
 import {WordStatuses} from "~/types/words/word";
 import {WordStatusNames} from "~/types/words/wordFe";
+import {AppDispatch} from "~/redux";
 
 
 export default function AddWords({onHide}: any) {
@@ -18,7 +19,7 @@ export default function AddWords({onHide}: any) {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const {words} = useSelector((state: any) => state.word)
 
     const {wordCategorys} = useSelector((state: any) => state.category)
@@ -43,9 +44,7 @@ export default function AddWords({onHide}: any) {
                 }
             }
 
-            // @ts-ignore
             await dispatch(getWords());
-            // @ts-ignore
             await dispatch(showPopup(popupTypes.none))
         } catch (e: any) {
             if (e.message.includes("401")) {

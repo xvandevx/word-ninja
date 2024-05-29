@@ -4,14 +4,11 @@ import {Row} from "@react-stately/table";
 
 export const DeleteUser = ({name, onDelete, onCancel}: any) => {
     return (
-        <div
-
-        >
+        <div>
             <div>
                 <div>
                     Delete {name}?
                 </div>
-
                     <Button size="sm" onClick={() => {onCancel()}}>
                         Cancel
                     </Button>

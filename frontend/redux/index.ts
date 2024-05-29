@@ -5,7 +5,10 @@ import {reducer} from "./reducers";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from '@redux-devtools/extension';
 
-// create a makeStore function
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+export type AppDispatch = ThunkDispatch<any, any, AnyAction>;
+
 const makeStore = (context: any) => {
     return createStore(
         reducer,
@@ -13,5 +16,4 @@ const makeStore = (context: any) => {
     );
 };
 
-// export an assembled wrapper
 export const wrapper = createWrapper(makeStore, {debug: false});

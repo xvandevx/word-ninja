@@ -8,10 +8,11 @@ import AddWord from "~/components/popups/addWord";
 import AddWords from "~/components/popups/addWords";
 import AddSentence from "~/components/popups/addSentence";
 import AddCategory from "~/components/popups/addCategory";
+import {AppDispatch} from "~/redux";
 
 export default function Popups() {
     const {visibleType} = useSelector((state: any) => state.popup)
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     useEffect( () => {
         const body = document.querySelector("body");
@@ -25,7 +26,6 @@ export default function Popups() {
     }, [visibleType] );
 
     const onHide = () => {
-        // @ts-ignore
         dispatch(showPopup(popupTypes.none))
     }
 

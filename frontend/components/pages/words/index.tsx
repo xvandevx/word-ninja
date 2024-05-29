@@ -1,7 +1,7 @@
 import ContentTable from "../../common/contentTable";
 import styles from "./index.module.scss";
 import {Button, Chip} from "@nextui-org/react";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Api} from "~/api";
 import {popupTypes} from "~/redux/reducers/popupReducer";
@@ -12,9 +12,10 @@ import {YandexIcon} from "~/components/icons/yandex";
 import clsx from "clsx";
 import Checkbox from "~/components/common/checkbox";
 import {WordStatuses} from "~/types/words/word";
+import {AppDispatch} from "~/redux";
 
 export default function WordsComponent() {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const [selectedKeys, setSelectedKeys]: any = useState({});
     const {words} = useSelector((state: any) => state.word)
     const {wordCategorys} = useSelector((state: any) => state.category)
@@ -52,7 +53,6 @@ export default function WordsComponent() {
                     await Api.words.delete(itemId);
                 }}
                 handleGetItems={async () => {
-                    // @ts-ignore
                     await dispatch(getWords());
                 }}
                 addItemPopupType={popupTypes.addWord}
@@ -137,7 +137,6 @@ export default function WordsComponent() {
                                     await Api.words.update(item.id, {
                                         translation: translate.translations[0].text,
                                     });
-                                    // @ts-ignore
                                     await dispatch(getWords());
                                 }
                             }}>Translate</Button>

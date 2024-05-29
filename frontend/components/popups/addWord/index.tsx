@@ -11,13 +11,14 @@ import {WordStatusNames} from "~/types/words/wordFe";
 import styles from "./index.module.scss";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
+import {AppDispatch} from "~/redux";
 
 export default function AddWord({onHide}: any) {
     const [result, setResult]: any = useState({status: `${WordStatuses.NewWord}`});
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const {data} = useSelector((state: any) => state.popup)
     const {words} = useSelector((state: any) => state.word)
 
@@ -54,11 +55,9 @@ export default function AddWord({onHide}: any) {
                     translation: result.translation?.toLowerCase().trim(),
                 });
             }
-            // @ts-ignore
             await dispatch(getWords());
 
             if (closePopup) {
-                // @ts-ignore
                 await dispatch(showPopup(popupTypes.none))
             }
         } catch (e: any) {

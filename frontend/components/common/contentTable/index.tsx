@@ -22,6 +22,7 @@ import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {WordStatuses} from "~/types/words/word";
 import clsx from "clsx";
+import {AppDispatch} from "~/redux";
 
 export default function ContentTable({
     name,
@@ -34,14 +35,10 @@ export default function ContentTable({
     tableBodyItem,
     setCurrentIds = () => {}
 }: any) {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [deleteItem, setDeleteItem]: any = useState(null);
-    const [sortDescriptor, setSortDescriptor] = useState({
-        column: "age",
-        direction: "ascending",
-    });
     const [filterValue, setFilterValue] = useState("");
 
     const [statusFilter, setStatusFilter] = useState([]);
@@ -54,7 +51,6 @@ export default function ContentTable({
     const [rowsPerPage, setRowsPerPage] = useState(20);
 
     const doDeleteItem = async () => {
-        // @ts-ignore
         await handleDeleteItem(deleteItem.id)
         setDeleteItem(null);
         handleGetItems();
@@ -190,7 +186,6 @@ export default function ContentTable({
                             className="bg-foreground text-background"
                             size="sm"
                             onClick={() => {
-                                // @ts-ignore
                                 dispatch(showPopup(popupTypes.addWord))
                             }}
                         >
@@ -200,7 +195,6 @@ export default function ContentTable({
                             className="bg-foreground text-background"
                             size="sm"
                             onClick={() => {
-                                // @ts-ignore
                                 dispatch(showPopup(popupTypes.addWords))
                             }}
                         >
@@ -215,7 +209,6 @@ export default function ContentTable({
                             className="bg-foreground text-background"
                             size="sm"
                             onClick={() => {
-                                // @ts-ignore
                                 dispatch(showPopup(popupTypes.addSentence))
                             }}
                         >

@@ -11,23 +11,6 @@
 }
 
 
-.Panel {
-
-  background-color: #27272a;
-  padding: 5px;
-  border-radius: 14px;
-  display: flex;
-  gap: 5px;
-  margin: auto;
-}
-
-.PanelWrapper {
-  width: 100%;
-  left: 0;
-  position: fixed;
-  bottom: 50px;
-  display: flex;
-}
 
 .Button {
   min-width: initial;
@@ -56,30 +39,67 @@
 
 .TableItem {
   position: relative;
+  background-color: #18181b;
+  border-radius: 5px;
+
+
+  &Wrapper {
+    display: flex;
+    margin-bottom: 5px;
+    flex-direction: column;
+  }
+
+  &Bottom {
+    background-color: #151517;
+    display: flex;
+    gap: 5px;
+    padding: 3px;
+    align-items: center;
+    opacity: 0.6;
+    position: relative;
+  }
+}
+
+.TableDate {
+  font-size: 14px;
 }
 
 .TableHead {
   background-color: #18181b;
   border-radius: 5px;
+  width: 100%;
 
   > div {
     padding: 10px 20px;
     font-size: 12px;
   }
+
+  &Wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    > Button {
+      display: none;
+    }
+  }
 }
 
 .Pluses {
-  position: absolute;
-  right: 0;
-  color: #333;
-  top: 0;
   font-size: 12px;
+  display: flex;
+  gap: 8px;
+  span {
+    gap: 3px;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .TableGrid {
   display: grid;
   cursor: pointer;
-  grid-template-columns: 1fr 1fr 150px 200px;
+  grid-template-columns: 60px 1fr 1fr 100px;
 
   > div {
     padding: 10px 20px;
@@ -96,42 +116,17 @@
   }
 }
 
-@media only screen and (max-width: 991px) {
-  .TableHead {
-    display: none;
-  }
+@media only screen and (max-width: 561px) {
   .TableItem {
-    background-color: #18181b;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    grid-template-columns: 1fr 1fr 80px;
-    padding-bottom: 30px;
-  }
 
-  .TableGrid {
-
-    > div {
-      text-align: center;
-      gap: 10px;
+    > div:nth-child(2) {
+      grid-column-start: 2;
+      grid-column-end: 4;
     }
-  }
-
-  .Actions {
-    display: flex;
-    flex-direction: column;
-
-
-  }
-
-  .Status {
-    position: absolute!important;
-    left: 0;
-    bottom: 0;
-  }
-
-  .Cats {
-    position: absolute!important;
-    right: 0px;
-    bottom: 0;
+    > div:nth-child(3) {
+      grid-column-start: 1;
+      grid-column-end: 4;
+      text-align: right;
+    }
   }
 }

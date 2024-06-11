@@ -1,0 +1,95 @@
+.Panel {
+  background-color: #27272a;
+  padding: 5px;
+  border-radius: 14px;
+  gap: 5px;
+  width: 100%;
+  left: 0;
+  bottom: 50px;
+  display: flex;
+  flex-direction: column;
+
+  &Bottons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 15px;
+    cursor: pointer;
+    height: 50px;
+    padding: 0 25px;
+
+    svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  &Show {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &Like {
+    gap: 5px;
+    background-color: #161616;
+    min-width: 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+.Slides {
+  margin: 100px 0;
+}
+
+.WordList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+
+  > div {
+    background-color: #161616;
+    border-radius: 20px;
+    padding: 2px 10px;
+    cursor: pointer;
+  }
+
+  &Liked {
+    background-color: #41b100 !important;
+  }
+
+  &Disliked {
+    background-color: #b10000 !important;
+  }
+
+  &Active {
+    background-color: #b1009a!important;
+  }
+}
+
+.Bottom {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ResetButton {
+  opacity: 0.1;
+  cursor: initial;
+
+  &Allowed {
+    opacity: 1;
+    cursor: pointer;
+  }
+}

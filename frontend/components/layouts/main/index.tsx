@@ -13,9 +13,8 @@ export default function MainLayout({children, userData}: any) {
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
             </Head>
             <Header userData={userData}/>
-            <div className='container'>
-                {children}
-            </div>
+
+            {children}
             <Popups/>
         </div>
     );

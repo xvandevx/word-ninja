@@ -12,6 +12,7 @@ import styles from "./index.module.scss";
 import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {AppDispatch} from "~/redux";
+import AddTabs from "~/components/popups/tabs";
 
 export default function AddWord({onHide}: any) {
     const [result, setResult]: any = useState({status: `${WordStatuses.NewWord}`});
@@ -112,6 +113,7 @@ export default function AddWord({onHide}: any) {
                 }} isLoading={isLoading} isDisabled={isLoading}>Add +1</Button>
             }
         >
+            <AddTabs/>
             <>
                 <Input
                     label="Word"

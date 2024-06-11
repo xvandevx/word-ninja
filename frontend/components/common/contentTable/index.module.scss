@@ -40,6 +40,8 @@
 
 .Categorys {
   margin-bottom: 10px;
+  display: flex;
+  gap: 15px;
 
   > div {
     padding: 0;
@@ -52,6 +54,91 @@
     color: #949494;
     line-height: initial;
   }
+}
+
+.Bottom {
+  margin: 50px 0;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+
+  label {
+    width: 125px;
+  }
+}
+
+.Swiper {
+  display: flex;
+}
+
+.SymbolWrapper {
+  display: flex;
+  width: initial!important;
+  margin-bottom: 10px;
+}
+
+.Symbol {
+  cursor: pointer;
+  background-color: #333;
+  border-radius: 50%;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.SymbolActive {
+  background-color: #9353d3!important;
+}
+
+.Panel {
+  background-color: #27272a;
+  padding: 5px;
+  border-radius: 14px;
+  display: flex;
+  gap: 5px;
+  margin: auto;
+
+  &Wrapper {
+    width: 100%;
+    left: 0;
+    position: fixed;
+    bottom: 100px;
+    display: flex;
+  }
+}
+
+.SortItem {
+  margin-left: 10px;
+  cursor: pointer;
+  &Active {
+    color: #9353d3;
+    padding-right: 15px;
+    position: relative;
+
+    &:after {
+      content: "";
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      right: 0;
+      top: 2px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' fill='none' focusable='false' height='1em' role='presentation' stroke='%239353d3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' viewBox='0 0 24 24' width='1em'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+    }
+  }
+
+  &Desc {
+    &:after {
+      transform: rotate(180deg);
+      right: -3px;
+      top: 4px;
+    }
+  }
+}
+
+.Table {
+  margin-bottom: 50px;
 }
 
 @media only screen and (max-width: 765px) {

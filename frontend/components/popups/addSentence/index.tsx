@@ -10,6 +10,7 @@ import {WordStatuses} from "~/types/words/word";
 import {WordStatusNames} from "~/types/words/wordFe";
 import {getSentences} from "~/redux/action-creaters/sentense";
 import {AppDispatch} from "~/redux";
+import AddTabs from "~/components/popups/tabs";
 
 export default function AddSentence({onHide}: any) {
     const [result, setResult]: any = useState({status: `${WordStatuses.NewWord}`});
@@ -66,6 +67,7 @@ export default function AddSentence({onHide}: any) {
             onSubmit={submit}
             errorText={error}
         >
+            <AddTabs/>
             <>
                 <Input
                     label="Sentence"

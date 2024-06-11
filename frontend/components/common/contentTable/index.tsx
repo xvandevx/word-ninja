@@ -2,27 +2,23 @@ import styles from './index.module.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {useMemo, useState, useCallback, useEffect} from "react";
 import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
     Input,
-    Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Tooltip, Pagination
+Button,
+    Tooltip, Pagination, Select, SelectItem
 } from "@nextui-org/react";
-import {ChevronDownIcon, DeleteIcon, EditIcon} from "@nextui-org/shared-icons";
+import {DeleteIcon, EditIcon} from "@nextui-org/shared-icons";
 import {showPopup} from "~/redux/action-creaters/popup";
-import {popupTypes} from "~/redux/reducers/popupReducer";
 import {DeleteUser} from "~/components/common/detele";
 import {WordStatusNames} from "~/types/words/wordFe";
 import Category from "./category";
-import {EyeIcon} from "~/components/icons/eye";
-import {GoogleIcon} from "~/components/icons/google";
-import {YandexIcon} from "~/components/icons/yandex";
 import {WordStatuses} from "~/types/words/word";
 import clsx from "clsx";
 import {AppDispatch} from "~/redux";
+import Checkbox from "~/components/common/checkbox";
+import {Api} from "~/api";
+import {Swiper, SwiperSlide} from "swiper/react";
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 export default function ContentTable({
     name,
@@ -33,19 +29,19 @@ export default function ContentTable({
     handleGetItems,
     tableHead,
     tableBodyItem,
-    setCurrentIds = () => {}
+    searchTranslatedWord = '',
 }: any) {
     const dispatch: AppDispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [deleteItem, setDeleteItem]: any = useState(null);
     const [filterValue, setFilterValue] = useState("");
+    const [filterSymbol, setFilterSymbol] = useState("");
+    const [statusFilter, setStatusFilter]: any = useState([]);
 
-    const [statusFilter, setStatusFilter] = useState([]);
-
-    const onRowsPerPageChange = useCallback((e: { target: { value: any; }; }) => {
+    const onRowsPerPageChange = useCallback((value: any) => {
         setPage(1)
-        setRowsPerPage(Number(e.target.value));
+        setRowsPerPage(value);
     }, []);
 
     const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -71,185 +67,293 @@ export default function ContentTable({
     }, [items])
 
     const itemsFiltered = useMemo(() => {
-        return itemsFormated.filter((item: any) => {
-            if (!selectedCategory) {
-                return true;
+        let items = itemsFormated
+        if (filterValue) {
+            items = items.filter((item: any) => item.word?.includes(filterValue) || item.translation?.includes(filterValue) || item.sentence?.includes(filterValue))
+            if (items.length === 0) {
+                items.push({
+                    status: WordStatuses.NewWord,
+                    word: filterValue,
+                    translation: searchTranslatedWord,
+                    categorys: []
+                })
             }
-            return item.categorys.map((categorys: any) => categorys.id).includes(selectedCategory)
-        }).filter((item: any) => {
-            return statusFilterArray.length === 0 || statusFilterArray.includes(item.status);
-        }).filter((item: any) => !filterValue || item.word?.includes(filterValue) || item.translation?.includes(filterValue) || item.sentence?.includes(filterValue))
-    }, [itemsFormated, selectedCategory, statusFilterArray, filterValue])
+        } else {
+            if (selectedCategory) {
+                items = items.filter((item: any) => {
+                    return item.categorys.map((categorys: any) => categorys.id).includes(selectedCategory)
+                })
+            }
+            if (statusFilterArray.length > 0) {
+                items = items.filter((item: any) => {
+                    return statusFilterArray.includes(item.status);
+                })
+            }
+
+            if (filterSymbol) {
+                items = items.filter((item: any) => {
+                    return item.word[0].toLowerCase() === filterSymbol.toLowerCase();
+                })
+            }
+        }
+
+        return items;
+    }, [itemsFormated, selectedCategory, statusFilterArray, filterValue, filterSymbol, searchTranslatedWord])
+
+    const sorts = ['Date', 'Word', 'Translation'];
+    const [sortItem, setSortItem]: any = useState(sorts[0]);
+    const [sortDirection, setSortDirection]: any = useState('asc');
+    const itemsFilteredAndSorted = useMemo(() => {
+        const items = [...itemsFiltered];
+        if (sortItem === sorts[0]) {
+            items.sort((a: any, b: any) => {
+                if (a.id < b.id) {
+                    return sortDirection === 'asc' ? -1 : 1;
+                }
+                if (a.id > b.id) {
+                    return sortDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        if (sortItem === sorts[1]) {
+            items.sort((a: any, b: any) => {
+                if (a.word < b.word) {
+                    return sortDirection === 'asc' ? -1 : 1;
+                }
+                if (a.word > b.word) {
+                    return sortDirection === 'asc' ?  1 : -1;
+                }
+                return 0;
+            });
+        }
+        if (sortItem === sorts[2]) {
+            items.sort((a: any, b: any) => {
+                if (a.translation < b.translation) {
+                    return sortDirection === 'asc' ? -1 : 1;
+                }
+                if (a.translation > b.translation) {
+                    return sortDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return items;
+
+    }, [itemsFiltered, sortItem, sortDirection])
 
     const wordsFilteredPaged = useMemo(() => {
-        return itemsFiltered.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage);
-    }, [itemsFiltered, page, rowsPerPage]);
+        return itemsFilteredAndSorted.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage);
+    }, [itemsFilteredAndSorted, page, rowsPerPage]);
 
     useEffect(() => {
         setCurrentIds(wordsFilteredPaged.map((item: any) => item.id))
     }, [wordsFilteredPaged]);
 
-    const actions = (item: any) => <>
-        <Button variant="light" disableAnimation={true} size="sm"  onClick={(e) => {
-            // @ts-ignore
-            dispatch(showPopup(addItemPopupType, item));
-        }}>
-             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-            </span>
-        </Button>
-        <Tooltip
-            content={
-                <DeleteUser
-                    name={` item ${deleteItem?.id}`}
-                    onDelete={() => {
-                        doDeleteItem()
-                    }}
-                    onCancel={() => {setDeleteItem(null)}}
-                />
-            }
-            placement='top'
-            isOpen={deleteItem?.id === item.id ? true : false}
-        >
-            <Button variant="light" disableAnimation={true} size="sm" onClick={() => {
-                setDeleteItem(item);
+    const symbols: string[] = 'A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z'.split(', ');
+
+    const actions = (item: any) => item.id ? (
+        <>
+            <Button variant="light" disableAnimation={true} size="sm" onClick={(e) => {
+                dispatch(showPopup(addItemPopupType, item));
             }}>
-                <div className="text-lg text-danger cursor-pointer active:opacity-50" >
-                    <DeleteIcon />
-                </div>
+                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <EditIcon/>
+                </span>
             </Button>
-        </Tooltip>
-    </>
+            <Tooltip
+                content={
+                    <DeleteUser
+                        name={` item ${deleteItem?.id}`}
+                        onDelete={() => {
+                            doDeleteItem()
+                        }}
+                        onCancel={() => {
+                            setDeleteItem(null)
+                        }}
+                    />
+                }
+                placement='top'
+                isOpen={deleteItem?.id === item.id ? true : false}
+            >
+                <Button variant="light" disableAnimation={true} size="sm" onClick={() => {
+                    setDeleteItem(item);
+                }}>
+                    <div className="text-lg text-danger cursor-pointer active:opacity-50">
+                        <DeleteIcon/>
+                    </div>
+                </Button>
+            </Tooltip>
+        </>
+    ) : (
+        <Button disableAnimation={true} size="sm" onClick={(e) => {
+            dispatch(showPopup(addItemPopupType, item));
+        }}> Add word</Button>
+    )
+
+    const [selectedKeys, setSelectedKeys]: any = useState({});
+    const checkbox = (item: any) => <Checkbox isChecked={selectedKeys[item.id]} isReadOnly={true}  onClick={(e: any) => {
+        setSelectedKeys({...selectedKeys, [item.id]: !selectedKeys[item.id]})
+    }}/>
+
+    const selectedKeyIds: any = useMemo(() => {
+        // @ts-ignore
+        return Object.keys(selectedKeys).filter((id: number) => selectedKeys[id]) || [];
+    }, [selectedKeys])
+
+    const [currentIds, setCurrentIds]: any = useState([]);
+
+    const isAllSelected = useMemo(() => {
+        return selectedKeyIds.length === currentIds.length
+    }, [selectedKeyIds, currentIds])
 
     return (
         <div>
             <div className={styles.Categorys}>
-                <Category name={name} categorys={categorys} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
+                <Category name={name} categorys={categorys} selectedCategory={selectedCategory}
+                          setSelectedCategory={setSelectedCategory}/>
+
+                <Select
+                    items={statusFilter}
+                    selectedKeys={statusFilter}
+                    label="Status"
+                    placeholder="Select an status"
+                    className="max-w-xs"
+                    selectionMode="multiple"
+                    onSelectionChange={(status) => {
+                        setStatusFilter(status)
+                    }}
+                >
+                    {Object.keys(WordStatusNames).map((status: string) => (
+                        <SelectItem key={status}>
+                            {   // @ts-ignore
+                                WordStatusNames[status]
+                            }
+                        </SelectItem>
+                    ))}
+                </Select>
             </div>
-            <div className="flex justify-between gap-3 items-end mb-3 flex-col sm:flex-row lg:flex-row">
+            {name === 'word' && (
+                <div className={styles.Swiper}>
+                    <Swiper slidesPerView={'auto'} spaceBetween={5}>
+                        {symbols.map(symbol => (
+                            <SwiperSlide className={styles.SymbolWrapper} key={symbol}
+                                  onClick={() => {
+                                      setFilterValue('');
+                                      setFilterSymbol(symbol === filterSymbol ? '' : symbol);
+                                  }}><span className={clsx(filterSymbol === symbol && styles.SymbolActive, styles.Symbol)}>{symbol}</span></SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
+            )}
+            <div className="flex justify-center">
                 <Input
                     isClearable
                     classNames={{
-                        base: "w-full sm:max-w-[30%]",
+                        base: "w-full sm:max-w-[40%]",
                         inputWrapper: "border-1",
                     }}
                     placeholder="Search"
-                    size="sm"
                     variant="bordered"
                     value={filterValue}
                     onClear={() => {
-                        setFilterValue("")
+                        setFilterValue("");
                         setPage(1)
                     }}
                     onValueChange={(value) => {
                         if (value) {
                             setFilterValue(value.toLowerCase());
+                            setFilterSymbol("");
                             setPage(1);
                         } else {
                             setFilterValue("");
                         }
                     }}
                 />
-                {name === 'word' && (
-                    <div className="flex gap-3">
-                        <Dropdown>
-                            <DropdownTrigger className="sm:flex">
-                                <Button
-                                    endContent={<ChevronDownIcon className="text-small" />}
-                                    size="sm"
-                                    variant="flat"
-                                >
-                                    {statusFilterArray.length === 0 ? `Status` : statusFilterArray.map(statusId => {
-                                        // @ts-ignore
-                                        return WordStatusNames[statusId]
-                                    }).join(', ')}
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                aria-label="Table Columns"
-                                closeOnSelect={false}
-                                selectionMode="multiple"
-                                selectedKeys={statusFilter}
-                                // @ts-ignore
-                                onSelectionChange={setStatusFilter}
-                            >
-                                {Object.keys(WordStatusNames).map((status: string) => (
-                                    <DropdownItem key={status} className="capitalize">
-                                        {   // @ts-ignore
-                                            WordStatusNames[status]
-                                        }
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
-                        <Button
-                            className="bg-foreground text-background"
-                            size="sm"
-                            onClick={() => {
-                                dispatch(showPopup(popupTypes.addWord))
-                            }}
-                        >
-                            Add word
-                        </Button>
-                        <Button
-                            className="bg-foreground text-background"
-                            size="sm"
-                            onClick={() => {
-                                dispatch(showPopup(popupTypes.addWords))
-                            }}
-                        >
-                            Add multiple words
-                        </Button>
-                    </div>
-                )}
-                {name === 'sentence' && (
-                    <div className="flex gap-3">
-
-                        <Button
-                            className="bg-foreground text-background"
-                            size="sm"
-                            onClick={() => {
-                                dispatch(showPopup(popupTypes.addSentence))
-                            }}
-                        >
-                            Add sentence
-                        </Button>
-                    </div>
-                )}
             </div>
             <div className="flex justify-between items-center">
                 <span className="text-default-400 text-small">Total: {itemsFiltered?.length}</span>
-                <label className="flex items-center text-default-400 text-small">
-                    Rows per page:
-                    <select
-                        className="bg-transparent outline-none text-default-400 text-small"
-                        onChange={onRowsPerPageChange}
-                        value={rowsPerPage}
-                    >
-                        <option value="20">20</option>
-                        <option value="40">40</option>
-                        <option value="100">100</option>
-                    </select>
-                </label>
+
+                <span
+                    className="text-default-400 text-small">Sort: {sorts.map(sort => (
+                        <span
+                            key={sort}
+                            className={clsx(styles.SortItem, sortItem === sort && styles.SortItemActive, sortDirection === 'asc' ? styles.SortItemAsc : styles.SortItemDesc)}
+                            onClick={() => {
+                                setSortItem(sort);
+                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+                            }}
+                        >{sort}</span>
+                ))}</span>
             </div>
 
-
-            <div>
+            <div className={styles.Table}>
                 {tableHead}
-                {wordsFilteredPaged?.map((item: any) => tableBodyItem(item, actions(item)))}
+                {wordsFilteredPaged?.map((item: any) => tableBodyItem(item, actions(item), checkbox(item)))}
             </div>
 
-            {itemsFiltered.length > rowsPerPage && (
-                <div className="flex w-full justify-center mb-10 mt-15">
+            {!filterValue && (
+                <div className={styles.Bottom}>
                     <Pagination
                         isCompact
                         showControls
                         showShadow
                         color="secondary"
                         page={page}
-                        total={Math.ceil(itemsFiltered.length / rowsPerPage)}
+                        total={itemsFiltered.length > rowsPerPage ? Math.ceil(itemsFiltered.length / rowsPerPage) : 1}
                         onChange={(page) => setPage(page)}
                     />
+
+                    <div className="flex items-center text-default-400 gap-2 text-small">
+                        <label>Rows per page:</label>
+
+                        <Select
+                            defaultSelectedKeys={[20]}
+                            className="max-w-xs"
+                            onChange={(rowsPerPage) => {
+                                onRowsPerPageChange(rowsPerPage.target.value)
+                            }}
+                        >
+                            <SelectItem key={20}>20</SelectItem>
+                            <SelectItem key={50}>50</SelectItem>
+                            <SelectItem key={100}>100</SelectItem>
+                        </Select>
+                    </div>
+                </div>
+            )}
+
+
+            {!filterValue && (
+                <div className={styles.PanelWrapper}>
+                    <div className={styles.Panel}>
+                        <Button
+                            color={isAllSelected ? 'primary' : 'default'}
+                            onClick={() => {
+                                if (!isAllSelected) {
+                                    const selectedKeys = {};
+                                    currentIds.map((item: any) => {
+                                        // @ts-ignore
+                                        selectedKeys[item] = true;
+                                    })
+                                    setSelectedKeys(selectedKeys)
+                                } else {
+                                    setSelectedKeys({})
+                                }
+                            }}>
+                            {isAllSelected ? 'Deselect' : 'Select'} all words
+                        </Button>
+                        {selectedKeyIds.length > 0 && (
+                            <Button onClick={async () => {
+                                for (const id of selectedKeyIds) {
+                                    await Api.words.update(id, {
+                                        status: WordStatuses.Learning,
+                                    });
+                                }
+                                window.location.href = '/learn'
+                            }}>Learn {
+                                // @ts-ignore
+                                selectedKeyIds.length} word{selectedKeyIds.length > 1 && 's'}</Button>)}
+                    </div>
                 </div>
             )}
         </div>

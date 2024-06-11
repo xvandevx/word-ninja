@@ -35,7 +35,7 @@ export default function Category({name, categorys, selectedCategory, setSelected
                 {selectedCategory && (
                     <div className={styles.Buttons}>
                         <Button variant="light"  disableAnimation={true} size="sm" className={styles.Button} onClick={(e) => {
-                            dispatch(showPopup(popupTypes.addCategory, categorys.find(item => item.id === selectedCategory)))
+                            dispatch(showPopup(popupTypes.addCategory, categorys.find((item: any) => item.id === selectedCategory)))
                         }}>
                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50" >
                                 <EditIcon />

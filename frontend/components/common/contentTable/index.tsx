@@ -102,7 +102,7 @@ export default function ContentTable({
 
     const sorts = ['Date', 'Word', 'Translation'];
     const [sortItem, setSortItem]: any = useState(sorts[0]);
-    const [sortDirection, setSortDirection]: any = useState('asc');
+    const [sortDirection, setSortDirection]: any = useState('desc');
     const itemsFilteredAndSorted = useMemo(() => {
         const items = [...itemsFiltered];
         if (sortItem === sorts[0]) {
@@ -208,7 +208,7 @@ export default function ContentTable({
     }, [selectedKeyIds, currentIds])
 
     return (
-        <div>
+        <div className={styles.Content}>
             <div className={styles.Categorys}>
                 <Category name={name} categorys={categorys} selectedCategory={selectedCategory}
                           setSelectedCategory={setSelectedCategory}/>

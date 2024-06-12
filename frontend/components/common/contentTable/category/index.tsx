@@ -66,7 +66,7 @@ export default function Category({name, categorys, selectedCategory, setSelected
                     </div>
                 )}
             </div>} >
-                <div className="flex gap-3 mb-3">
+                <div className="flex gap-3 mb-3 flex-wrap">
                     {categorys.map((column: any) => (
                         <Button key={column.uid} color={column.id === selectedCategory ? 'primary' : 'default'} variant='bordered' size="sm" onClick={() => {
                             setSelectedCategory(column.id === selectedCategory ? null : column.id);

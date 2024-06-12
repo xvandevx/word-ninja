@@ -10,6 +10,7 @@ import {CSSTransition} from 'react-transition-group';
 import {getSentences} from "~/redux/action-creaters/sentense";
 import {AppDispatch} from "~/redux";
 import AddNew from "~/components/common/addNew";
+import {popupTypes} from "~/redux/reducers/popupReducer";
 
 export default function Words({userData}: any) {
     const dispatch: AppDispatch = useDispatch();
@@ -53,7 +54,7 @@ export default function Words({userData}: any) {
                 >
                     <WordsComponent/>
                 </CSSTransition>
-                <AddNew/>
+                <AddNew popupType={popupTypes.addWord}/>
             </div>
         </MainLayout>
 )

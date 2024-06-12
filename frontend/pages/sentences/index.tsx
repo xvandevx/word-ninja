@@ -9,6 +9,7 @@ import {Spinner} from "@nextui-org/react";
 import {CSSTransition} from 'react-transition-group';
 import {AppDispatch} from "~/redux";
 import AddNew from "~/components/common/addNew";
+import {popupTypes} from "~/redux/reducers/popupReducer";
 
 export default function Sentences({userData}: any) {
     const dispatch: AppDispatch = useDispatch();
@@ -51,7 +52,7 @@ export default function Sentences({userData}: any) {
                 >
                     <SentencesComponent/>
                 </CSSTransition>
-                <AddNew/>
+                <AddNew popupType={popupTypes.addSentence}/>
             </div>
         </MainLayout>
 )

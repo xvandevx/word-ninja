@@ -1,32 +1,22 @@
 import React from "react";
-import {Tabs, Tab, Card, CardBody} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
+import {popupTypes} from "~/redux/reducers/popupReducer";
+import {AppDispatch} from "~/redux";
+import {useDispatch} from "react-redux";
+import {showPopup} from "~/redux/action-creaters/popup";
 
-export default function AddTabs() {
+export default function AddTabs({popupType = ''}) {
+    const dispatch: AppDispatch = useDispatch();
 
-
-    return <div className="flex w-full flex-col">
-        <Tabs aria-label="Options">
-            <Tab key="photos" title="Photos">
-                <Card>
-                    <CardBody>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </CardBody>
-                </Card>
-            </Tab>
-            <Tab key="music" title="Music">
-                <Card>
-                    <CardBody>
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    </CardBody>
-                </Card>
-            </Tab>
-            <Tab key="videos" title="Videos">
-                <Card>
-                    <CardBody>
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </CardBody>
-                </Card>
-            </Tab>
-        </Tabs>
+    return <div className="flex gap-2 mb-2">
+        <Button color={popupType === popupTypes.addWord ? 'primary' : 'default'} variant='bordered' size="sm" onClick={() => {
+            dispatch(showPopup(popupTypes.addWord))
+        }}>Word</Button>
+        <Button color={popupType === popupTypes.addWords ? 'primary' : 'default'} variant='bordered' size="sm" onClick={() => {
+            dispatch(showPopup(popupTypes.addWords))
+        }}>Multiple words</Button>
+        <Button color={popupType === popupTypes.addSentence ? 'primary' : 'default'} variant='bordered' size="sm" onClick={() => {
+            dispatch(showPopup(popupTypes.addSentence))
+        }}>Sentence</Button>
     </div>
 }

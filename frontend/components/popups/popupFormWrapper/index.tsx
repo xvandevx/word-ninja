@@ -5,6 +5,8 @@ import {showPopup} from "../../../redux/action-creaters/popup";
 import {popupTypes} from "../../../redux/reducers/popupReducer";
 import Link from "next/link";
 import {Button} from "@nextui-org/react";
+import AddTabs from "~/components/popups/tabs";
+import {AppDispatch} from "~/redux";
 
 export default function PopupFormWrapper({
     title = '',
@@ -13,17 +15,18 @@ export default function PopupFormWrapper({
     additionalButton = null,
     errorText = '',
     children,
-    topText = ''
+    topText = '',
+    popupType = ''
 }: any) {
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     const onHide = () => {
-        // @ts-ignore
         dispatch(showPopup(popupTypes.none))
     }
 
     return (
         <>
+            <AddTabs popupType={popupType}/>
             <h2>{title}</h2>
             <div className={styles.Content}>
                 {topText && <div className={styles.TopText}>

@@ -66,8 +66,8 @@ export default function AddSentence({onHide}: any) {
             isLoading={isLoading}
             onSubmit={submit}
             errorText={error}
+            popupType={popupTypes.addSentence}
         >
-            <AddTabs/>
             <>
                 <Input
                     label="Sentence"

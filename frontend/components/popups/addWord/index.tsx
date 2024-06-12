@@ -112,8 +112,8 @@ export default function AddWord({onHide}: any) {
                     submit(false);
                 }} isLoading={isLoading} isDisabled={isLoading}>Add +1</Button>
             }
+            popupType={popupTypes.addWord}
         >
-            <AddTabs/>
             <>
                 <Input
                     label="Word"

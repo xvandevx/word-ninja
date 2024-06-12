@@ -63,6 +63,7 @@ export default function AddWords({onHide}: any) {
             isLoading={isLoading}
             onSubmit={submit}
             errorText={error}
+            popupType={popupTypes.addWords}
         >
             <>
                 <Textarea

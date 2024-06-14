@@ -244,6 +244,8 @@ export default function LearnComponent() {
                                     await Api.words.update(word.id, {
                                         status: (+word.status + 1),
                                     });
+                                    setIsShowTranslation(false);
+                                    setIsShowSentences(false);
                                     await dispatch(getWords());
                                 }}>
                                     <BsCheck2Circle/>

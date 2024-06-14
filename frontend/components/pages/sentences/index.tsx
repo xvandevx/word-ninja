@@ -22,17 +22,6 @@ export default function SentencesComponent() {
     const {sentences} = useSelector((state: any) => state.sentence)
     const {sentenceCategorys} = useSelector((state: any) => state.category)
 
-    const categorysByIds: any = useMemo(() => {
-        const categorys = {}
-        sentenceCategorys.map((item: any) => {
-            // @ts-ignore
-            categorys[item.id] = item;
-        });
-        return categorys;
-    }, [sentenceCategorys])
-
-    const [searchTranslatedWord, setSearchTranslatedWord] = useState('');
-
     return (
         <div>
             <ContentTable
@@ -47,86 +36,6 @@ export default function SentencesComponent() {
                     await dispatch(getSentences());
                 }}
                 addItemPopupType={popupTypes.addSentence}
-                searchTranslatedWord={searchTranslatedWord}
-                tableBodyItem={(item: any, actions: any, checkbox: any) =>
-                    <div className={styles.TableItemWrapper}>
-                        <div className={clsx(styles.TableItem, styles.TableGrid)}>
-                            <div>{checkbox}</div>
-                            <div className={styles.TableItemWord}>
-                                <div className='flex'>
-                                    <span>{item.sentence}</span>
-                                </div>
-                                <div className='flex gap-2'>
-                                    <a
-                                        href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${item.word || item.sentence}%0A&op=translate`}
-                                        target="_blank"
-                                        rel="nofollow"
-                                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                    >
-                                        <GoogleIcon/>
-                                    </a>
-                                    <a
-                                        href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${item.word || item.sentence}`}
-                                        target="_blank"
-                                        rel="nofollow"
-                                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                                    >
-                                        <YandexIcon/>
-                                    </a>
-                                </div>
-                                {item.comment &&
-                                    <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
-
-
-                            </div>
-                            <div>{item.translation ? item.translation : (
-                                <Button size="sm" color="warning" onClick={async () => {
-                                    const translate = await Api.translate.get(item.sentence, 'en', 'ru')
-
-                                    if (translate?.translations?.length > 0) {
-                                        if (item.id) {
-                                            await Api.sentences.update(item.id, {
-                                                translation: translate.translations[0].text,
-                                            });
-                                            await dispatch(getSentences());
-                                        } else {
-                                            setSearchTranslatedWord(translate.translations[0].text)
-                                        }
-                                    }
-                                }}>Translate</Button>
-                            )}</div>
-
-
-                            <div className={styles.Actions}>{actions}</div>
-                        </div>
-                        <div className={styles.TableItemBottom}>
-                            <div className={styles.TableDate}>
-                                {item.date}
-                            </div>
-                            <div className={styles.Status}>
-                                <Chip className="capitalize" size="sm" variant="flat">
-                                    {
-                                        // @ts-ignore
-                                        WordStatusNames[item.status]}
-                                </Chip>
-
-                            </div>
-                            <div className={styles.Pluses}>
-                                <span><AiOutlineLike />{item.pluses}</span>
-                                <span><AiOutlineDislike />{item.minuses}</span>
-                            </div>
-
-                            <div
-                                className={styles.Cats}>{item.categorys.filter((item: any) => categorysByIds[item.id]).map((item: any) => (
-                                <Chip className="capitalize" size="sm" variant="flat" key={item.id}>
-                                    {
-                                        categorysByIds[item.id]?.name
-                                    }
-                                </Chip>
-                            ))}</div>
-                        </div>
-                    </div>
-                }
             />
         </div>
     )

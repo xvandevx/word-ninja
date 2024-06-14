@@ -3,8 +3,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {useMemo, useState, useCallback, useEffect} from "react";
 import {
     Input,
-Button,
-    Tooltip, Pagination, Select, SelectItem
+    Button,
+    Tooltip, Pagination, Select, SelectItem, Chip
 } from "@nextui-org/react";
 import {DeleteIcon, EditIcon} from "@nextui-org/shared-icons";
 import {showPopup} from "~/redux/action-creaters/popup";
@@ -19,6 +19,10 @@ import {Api} from "~/api";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import 'swiper/css/navigation';
+import {GoogleIcon} from "~/components/icons/google";
+import {YandexIcon} from "~/components/icons/yandex";
+import {getWords} from "~/redux/action-creaters/word";
+import {AiOutlineDislike, AiOutlineLike} from "react-icons/ai";
 
 export default function ContentTable({
     name,
@@ -28,8 +32,6 @@ export default function ContentTable({
     handleDeleteItem,
     handleGetItems,
     tableHead,
-    tableBodyItem,
-    searchTranslatedWord = '',
 }: any) {
     const dispatch: AppDispatch = useDispatch();
     const [page, setPage] = useState(1);
@@ -43,6 +45,18 @@ export default function ContentTable({
         setPage(1)
         setRowsPerPage(value);
     }, []);
+
+    const categorysByIds: any = useMemo(() => {
+        const categorysItems = {}
+        categorys.map((item: any) => {
+            // @ts-ignore
+            categorys[item.id] = item;
+        });
+        return categorysItems;
+    }, [categorys])
+
+    const [searchTranslatedWord, setSearchTranslatedWord] = useState('');
+
 
     const [rowsPerPage, setRowsPerPage] = useState(20);
 
@@ -122,7 +136,7 @@ export default function ContentTable({
                     return sortDirection === 'asc' ? -1 : 1;
                 }
                 if (a.word > b.word) {
-                    return sortDirection === 'asc' ?  1 : -1;
+                    return sortDirection === 'asc' ? 1 : -1;
                 }
                 return 0;
             });
@@ -191,10 +205,90 @@ export default function ContentTable({
         }}> Add word</Button>
     )
 
-    const [selectedKeys, setSelectedKeys]: any = useState({});
-    const checkbox = (item: any) => <Checkbox isChecked={selectedKeys[item.id]} isReadOnly={true}  onClick={(e: any) => {
+
+    const tableBodyItem = (item: any) => <div className={styles.TableItemWrapper}  onClick={(e: any) => {
         setSelectedKeys({...selectedKeys, [item.id]: !selectedKeys[item.id]})
-    }}/>
+    }}>
+        <div className={clsx(styles.TableItem, styles.TableGrid)}>
+            <div>{checkbox(item)}</div>
+            <div className={styles.TableItemWord}>
+                <div className='flex'>
+                    <span>{item.word || item.sentence}</span>
+                </div>
+                <div className='flex gap-2'>
+                    <a
+                        href={`https://translate.google.com/?hl=ru&sl=en&tl=ru&text=${item.word || item.sentence}%0A&op=translate`}
+                        target="_blank"
+                        rel="nofollow"
+                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                    >
+                        <GoogleIcon/>
+                    </a>
+                    <a
+                        href={`https://translate.yandex.ru/?utm_source=main_stripe_big&source_lang=en&target_lang=ru&text=${item.word || item.sentence}`}
+                        target="_blank"
+                        rel="nofollow"
+                        className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                    >
+                        <YandexIcon/>
+                    </a>
+                </div>
+                {item.comment &&
+                    <p className="text-bold text-sm capitalize text-default-400">{item.comment}</p>}
+
+
+            </div>
+            <div>{item.translation ? item.translation : (
+                <Button size="sm" color="warning" onClick={async () => {
+                    const translate = await Api.translate.get(item.word, 'en', 'ru')
+
+                    if (translate?.translations?.length > 0) {
+                        if (item.id) {
+                            await Api.words.update(item.id, {
+                                translation: translate.translations[0].text,
+                            });
+                            await dispatch(getWords());
+                        } else {
+                            setSearchTranslatedWord(translate.translations[0].text)
+                        }
+                    }
+                }}>Translate</Button>
+            )}</div>
+
+
+            <div className={styles.Actions}>{actions(item)}</div>
+        </div>
+        <div className={styles.TableItemBottom}>
+            <div className={styles.TableDate}>
+                {item.date}
+            </div>
+            <div className={styles.Status}>
+                <Chip className="capitalize" size="sm" variant="flat">
+                    {
+                        // @ts-ignore
+                        WordStatusNames[item.status]}
+                </Chip>
+
+            </div>
+            <div className={styles.Pluses}>
+                <span><AiOutlineLike/>{item.pluses}</span>
+                <span><AiOutlineDislike/>{item.minuses}</span>
+            </div>
+
+            <div
+                className={styles.Cats}>{item.categorys.filter((item: any) => categorysByIds[item.id]).map((item: any) => (
+                <Chip className="capitalize" size="sm" variant="flat" key={item.id}>
+                    {
+                        // @ts-ignore
+                        categorysByIds[item.id]?.name
+                    }
+                </Chip>
+            ))}</div>
+        </div>
+    </div>
+
+    const [selectedKeys, setSelectedKeys]: any = useState({});
+    const checkbox = (item: any) => <Checkbox isChecked={selectedKeys[item.id]} isReadOnly={true}/>
 
     const selectedKeyIds: any = useMemo(() => {
         // @ts-ignore
@@ -206,6 +300,16 @@ export default function ContentTable({
     const isAllSelected = useMemo(() => {
         return selectedKeyIds.length === currentIds.length
     }, [selectedKeyIds, currentIds])
+
+    const [scrollBottom, setScrollBottom] = useState(false);
+
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 50) {
+            setScrollBottom(true)
+        } else {
+            setScrollBottom(false)
+        }
+    };
 
     return (
         <div className={styles.Content}>
@@ -238,10 +342,11 @@ export default function ContentTable({
                     <Swiper slidesPerView={'auto'} spaceBetween={5}>
                         {symbols.map(symbol => (
                             <SwiperSlide className={styles.SymbolWrapper} key={symbol}
-                                  onClick={() => {
-                                      setFilterValue('');
-                                      setFilterSymbol(symbol === filterSymbol ? '' : symbol);
-                                  }}><span className={clsx(filterSymbol === symbol && styles.SymbolActive, styles.Symbol)}>{symbol}</span></SwiperSlide>
+                                         onClick={() => {
+                                             setFilterValue('');
+                                             setFilterSymbol(symbol === filterSymbol ? '' : symbol);
+                                         }}><span
+                                className={clsx(filterSymbol === symbol && styles.SymbolActive, styles.Symbol)}>{symbol}</span></SwiperSlide>
                         ))}
                     </Swiper>
                 </div>
@@ -276,20 +381,20 @@ export default function ContentTable({
 
                 <span
                     className="text-default-400 text-small">Sort: {sorts.map(sort => (
-                        <span
-                            key={sort}
-                            className={clsx(styles.SortItem, sortItem === sort && styles.SortItemActive, sortDirection === 'asc' ? styles.SortItemAsc : styles.SortItemDesc)}
-                            onClick={() => {
-                                setSortItem(sort);
-                                setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-                            }}
-                        >{sort}</span>
+                    <span
+                        key={sort}
+                        className={clsx(styles.SortItem, sortItem === sort && styles.SortItemActive, sortDirection === 'asc' ? styles.SortItemAsc : styles.SortItemDesc)}
+                        onClick={() => {
+                            setSortItem(sort);
+                            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+                        }}
+                    >{sort}</span>
                 ))}</span>
             </div>
 
             <div className={styles.Table}>
                 {tableHead}
-                {wordsFilteredPaged?.map((item: any) => tableBodyItem(item, actions(item), checkbox(item)))}
+                {wordsFilteredPaged?.map((item: any) => tableBodyItem(item))}
             </div>
 
             {!filterValue && (
@@ -324,7 +429,7 @@ export default function ContentTable({
 
 
             {!filterValue && (
-                <div className={styles.PanelWrapper}>
+                <div className={clsx(scrollBottom && styles.PanelWrapperBottom,styles.PanelWrapper)}>
                     <div className={styles.Panel}>
                         <Button
                             color={isAllSelected ? 'primary' : 'default'}

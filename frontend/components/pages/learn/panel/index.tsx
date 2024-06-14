@@ -61,11 +61,13 @@ export default function Panel({isAllowReset, currentLikes, currentWordKey, learn
                             <div className={styles.Bottom}>
                                 <Button size="sm" color="warning" onClick={async () => {
                                     for (const item in currentLikes) {
-                                        await Api.words.update(+item, {
-                                            status: WordStatuses.Learned,
-                                        });
-                                        await dispatch(getWords());
+                                        if (currentLikes[item]) {
+                                            await Api.words.update(+item, {
+                                                status: WordStatuses.Learned,
+                                            });
+                                        }
                                     }
+                                    await dispatch(getWords());
                                     onResetLikes()
                                 }}>Set all liked words as learned</Button>
                             </div>

@@ -30,7 +30,7 @@ export default function Category({name, categorys, selectedCategory, setSelected
             <AccordionItem title={<div className='flex flex justify-between'>
                 <div className={styles.Category}>
                     <div>Category</div>
-                    {categorys.find((item:any) => item.id === selectedCategory)?.name  || `All ${name}s`}
+                    {categorys?.find((item:any) => item && item.id === selectedCategory)?.name  || `All ${name}s`}
                 </div>
                 {selectedCategory && (
                     <div className={styles.Buttons}>

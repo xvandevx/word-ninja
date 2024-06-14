@@ -50,7 +50,9 @@ export default function ContentTable({
         const categorysItems = {}
         categorys.map((item: any) => {
             // @ts-ignore
-            categorys[item.id] = item;
+            if (item) {
+                categorys[item.id] = item;
+            }
         });
         return categorysItems;
     }, [categorys])
@@ -95,7 +97,7 @@ export default function ContentTable({
         } else {
             if (selectedCategory) {
                 items = items.filter((item: any) => {
-                    return item.categorys.map((categorys: any) => categorys.id).includes(selectedCategory)
+                    return item.categorys.map((categorys: any) => categorys?.id).includes(selectedCategory)
                 })
             }
             if (statusFilterArray.length > 0) {

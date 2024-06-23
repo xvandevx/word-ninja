@@ -87,10 +87,11 @@ export default function ContentTable({
             let statusInfo = '';
             if (item.status === WordStatuses.Learned) {
                 const days = daysDifference(item.lastStatusDate) + Repeats[item.learnCount];
-                if (days <= 0) {
-                    status = WordStatuses.NeedToRepeat;
-                } else {
+
+                if (days > 0) {
                     statusInfo = `repeat in ${days} days`;
+                } else if (days <= 0) {
+                    status = WordStatuses.NeedToRepeat;
                 }
             }
 

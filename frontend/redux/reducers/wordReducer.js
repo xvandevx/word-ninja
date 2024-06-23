@@ -1,5 +1,6 @@
 const initialState = {
     words: [],
+    wordCategorys: '',
 }
 
 export const wordReducer = (state = initialState, action) => {

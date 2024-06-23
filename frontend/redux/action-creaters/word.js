@@ -8,3 +8,17 @@ export const getWords = () => {
     }
 }
 
+export const updateWord = (newWord) => {
+    return async (dispatch, getState) => {
+        const {word} = getState()
+
+        console.log('newWord', newWord)
+
+        dispatch({type: 'FETCH_WORDS', payload: word.words.map(item => {
+            if (newWord.id === item.id) {
+                return newWord
+            }
+            return item;
+        })})
+    }
+}

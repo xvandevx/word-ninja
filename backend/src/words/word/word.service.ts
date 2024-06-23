@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Word } from './word.model';
-import { WordDto } from './dto/word.dto';
 import {WordStatuses} from "../../../types/words/word";
 import {Category} from "../../category/category.model";
 
@@ -19,6 +18,7 @@ export class WordService {
       pluses: 0,
       minuses: 0,
       status: dto.status,
+      learnCount: 0,
       comment: dto.comment,
       userId
     });
@@ -39,6 +39,7 @@ export class WordService {
         translation: dto.translation,
         comment: dto.comment,
         status: dto.status,
+        learnCount: dto.learnCount,
       });
       if (dto.categorys) {
         await word.$set(
@@ -47,6 +48,7 @@ export class WordService {
         );
       }
     }
+    return word;
   }
 
   async setMinus(id: number, userId) {
@@ -56,6 +58,7 @@ export class WordService {
         minuses: word.dataValues.minuses + 1,
       });
     }
+    return word;
   }
 
   async setPlus(id: number, userId) {
@@ -65,15 +68,24 @@ export class WordService {
         pluses: word.dataValues.pluses + 1,
       });
     }
+    return word;
   }
 
-  async setStatus(id: number, status: WordStatuses,  userId) {
+  async setStatus(id: number, dto,  userId) {
     const word = await this.wordRepository.findByPk(id);
     if (word.dataValues.userId === userId) {
-      await word.update({
-        status: status,
-      });
+      const updateData: any  = {
+        status: +dto.status,
+      }
+      if (dto.status == WordStatuses.Learned) {
+        //const date = new Date();
+        updateData.lastStatusDate = new Date().toISOString();
+        //updateData.lastStatusDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+        updateData.learnCount = +word.dataValues.learnCount + 1;
+      }
+      await word.update(updateData);
     }
+    return word;
   }
 
   async getAll(userId) {

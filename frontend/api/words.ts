@@ -21,16 +21,20 @@ export default (axios: any, config: any) => ({
         return data;
     },
     async delete(id: number) {
-        await axios.delete(`${config.API_URL}/words/word/${id}`);
+        const {data} = await axios.delete(`${config.API_URL}/words/word/${id}`);
+        return data;
     },
     async setMinus(id: number) {
-        await axios.post(`${config.API_URL}/words/word/minus/${id}`);
+        const {data} =  await axios.post(`${config.API_URL}/words/word/minus/${id}`);
+        return data;
     },
     async setPlus(id: number) {
-        await axios.post(`${config.API_URL}/words/word/plus/${id}`);
+        const {data} =  await axios.post(`${config.API_URL}/words/word/plus/${id}`);
+        return data;
     },
     async setStatus(id: number, status: WordStatuses) {
-        await axios.post(`${config.API_URL}/words/setStatus/${id}?status=${status}`);
+        const {data} =  await axios.post(`${config.API_URL}/words/word/setStatus/${id}`, `status=${status}`);
+        return data;
     },
     getTranslation(word: string) {
         const wordPreared = word.trim();

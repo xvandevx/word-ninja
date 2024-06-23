@@ -38,6 +38,9 @@ export class Word extends Model<Word, WordInterface> {
   @Column({ type: DataType.INTEGER, allowNull: false })
   status: number;
 
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  learnCount: number;
+
   @Column({ type: DataType.STRING })
   lastStatusDate: string;
 

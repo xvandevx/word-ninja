@@ -11,7 +11,7 @@ import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {popupTypes} from "~/redux/reducers/popupReducer";
 import {WordStatuses} from "~/types/words/word";
-import {getWords} from "~/redux/action-creaters/word";
+import {getWords, updateWord} from "~/redux/action-creaters/word";
 import clsx from "clsx";
 import {AppDispatch} from "~/redux";
 import {
@@ -23,6 +23,7 @@ import {
 import Panel from "./panel";
 import {AiOutlineDislike, AiOutlineLike} from "react-icons/ai";
 import {cloneDeep} from "lodash";
+import Card from "~/components/pages/learn/card";
 
 enum LearnTypes {
     EnRu = 'En-Ru',
@@ -41,7 +42,7 @@ export default function LearnComponent() {
 
     const learningWords = useMemo(() => {
         return words.filter((word: any) => {
-            return [WordStatuses.Learning, WordStatuses.RepeatingMouth, WordStatuses.RepeatingSixMouth, WordStatuses.RepeatingYear].includes(word.status)
+            return [WordStatuses.Learning].includes(word.status)
         });
     }, [words]);
 
@@ -98,7 +99,6 @@ export default function LearnComponent() {
             )}
             {learningWordsSorted.length > 0 && (
                 <div className={styles.Content}>
-
                     <div className={styles.LearnWrapper}>
                         <div className={styles.Arrows}>
                             <div className={styles.Left} onClick={() => {
@@ -113,6 +113,7 @@ export default function LearnComponent() {
                             </div>
 
                         </div>
+
                         <div className={styles.Learn}>
 
                             <div className={styles.Top}>
@@ -233,26 +234,27 @@ export default function LearnComponent() {
 
                             <div className={styles.Bottom}>
                                 <div className={styles.Dislike} onClick={async () => {
-                                    await Api.words.setMinus(word.id)
-                                    await dispatch(getWords());
+                                    const updatedWord = await Api.words.setMinus(word.id)
+                                    dispatch(updateWord(updatedWord));
+
                                     setCurrentLikes({...currentLikes, [word.id]: false})
                                     setNextWord();
                                 }}><AiOutlineDislike/>
                                     <div><span>{word.minuses}</span></div>
                                 </div>
                                 <div onClick={async () => {
-                                    await Api.words.update(word.id, {
-                                        status: (+word.status + 1),
-                                    });
+                                    const updatedWord = await Api.words.setStatus(word.id, WordStatuses.Learned);
+                                    dispatch(updateWord(updatedWord));
+
                                     setIsShowTranslation(false);
                                     setIsShowSentences(false);
-                                    await dispatch(getWords());
                                 }}>
                                     <BsCheck2Circle/>
                                 </div>
                                 <div className={styles.Like} onClick={async () => {
-                                    await Api.words.setPlus(word.id);
-                                    await dispatch(getWords());
+                                    const updatedWord = await Api.words.setPlus(word.id)
+                                    dispatch(updateWord(updatedWord));
+
                                     setCurrentLikes({...currentLikes, [word.id]: true})
                                     setNextWord();
                                 }}><AiOutlineLike/>

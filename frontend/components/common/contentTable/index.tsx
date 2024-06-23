@@ -23,6 +23,14 @@ import {GoogleIcon} from "~/components/icons/google";
 import {YandexIcon} from "~/components/icons/yandex";
 import {getWords} from "~/redux/action-creaters/word";
 import {AiOutlineDislike, AiOutlineLike} from "react-icons/ai";
+import {daysDifference} from "~/utils";
+import {getSentences} from "~/redux/action-creaters/sentense";
+
+const Repeats: Record<number, number> = {
+    1: 60,
+    2: 180,
+    3: 365
+}
 
 export default function ContentTable({
     name,
@@ -75,8 +83,23 @@ export default function ContentTable({
     const itemsFormated = useMemo(() => {
         return items.map((item: any) => {
             const date = new Date(item.createdAt);
+            let status = item.status || WordStatuses.NewWord;
+            let statusInfo = '';
+            if (item.status === WordStatuses.Learned) {
+                const days = daysDifference(item.lastStatusDate) + Repeats[item.learnCount];
+                if (days <= 0) {
+                    status = WordStatuses.NeedToRepeat;
+                } else {
+                    statusInfo = `repeat in ${days} days`;
+                }
+            }
+
             return {
                 ...item,
+                statusInfo,
+                status,
+                pluses: item.pluses || 0,
+                minuses: item.minuses || 0,
                 date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
             }
         })
@@ -242,14 +265,21 @@ export default function ContentTable({
             </div>
             <div>{item.translation ? item.translation : (
                 <Button size="sm" color="warning" onClick={async () => {
-                    const translate = await Api.translate.get(item.word, 'en', 'ru')
+                    const translate = await Api.translate.get(item.word || item.sentence, 'en', 'ru')
 
                     if (translate?.translations?.length > 0) {
                         if (item.id) {
-                            await Api.words.update(item.id, {
-                                translation: translate.translations[0].text,
-                            });
-                            await dispatch(getWords());
+                            if (name === 'word') {
+                                await Api.words.update(item.id, {
+                                    translation: translate.translations[0].text,
+                                });
+                                await dispatch(getWords());
+                            } else {
+                                await Api.sentences.update(item.id, {
+                                    translation: translate.translations[0].text,
+                                });
+                                await dispatch(getSentences());
+                            }
                         } else {
                             setSearchTranslatedWord(translate.translations[0].text)
                         }
@@ -268,7 +298,7 @@ export default function ContentTable({
                 <Chip className="capitalize" size="sm" variant="flat">
                     {
                         // @ts-ignore
-                        WordStatusNames[item.status]}
+                        WordStatusNames[item.status]}{item.statusInfo && `, ${item.statusInfo}`}
                 </Chip>
 
             </div>
@@ -452,9 +482,15 @@ export default function ContentTable({
                         {selectedKeyIds.length > 0 && (
                             <Button onClick={async () => {
                                 for (const id of selectedKeyIds) {
-                                    await Api.words.update(id, {
-                                        status: WordStatuses.Learning,
-                                    });
+                                    if (name === 'word') {
+                                        await Api.words.update(id, {
+                                            status: WordStatuses.Learning,
+                                        });
+                                    } else {
+                                        await Api.sentences.update(id, {
+                                            status: WordStatuses.Learning,
+                                        });
+                                    }
                                 }
                                 window.location.href = '/learn'
                             }}>Learn {

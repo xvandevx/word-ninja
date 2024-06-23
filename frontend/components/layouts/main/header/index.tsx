@@ -36,7 +36,7 @@ export default function Header({userData}: any) {
     const learningWordsCount = useMemo(() => {
 
         return words.filter((word: any) => {
-            return [WordStatuses.Learning, WordStatuses.RepeatingMouth, WordStatuses.RepeatingSixMouth, WordStatuses.RepeatingYear].includes(word.status)
+            return [WordStatuses.Learning].includes(word.status)
         }).length;
     }, [words]);
 

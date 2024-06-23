@@ -24,22 +24,22 @@ export class WordController {
 
   @Post('/minus/:id')
   async setMinus(@Param('id') id: number, @Request() req: any) {
-    await this.wordService.setMinus(id, req?.user?.id);
+    return await this.wordService.setMinus(id, req?.user?.id);
   }
 
   @Post('/plus/:id')
   async setPlus(@Param('id') id: number, @Request() req: any) {
-    await this.wordService.setPlus(id, req?.user?.id);
+    return await this.wordService.setPlus(id, req?.user?.id);
   }
 
   @Post('/setStatus/:id')
-  async setStatus(@Param('id') id: number, @Body() wordDto: any, @Request() req: any) {
-    await this.wordService.setStatus(id, wordDto, req?.user?.id);
+  async setStatus(@Param('id') id: number, @Body() wordDto: WordDto, @Request() req: any) {
+    return await this.wordService.setStatus(id, wordDto, req?.user?.id);
   }
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() wordDto: WordDto, @Request() req: any) {
-    await this.wordService.update(id, wordDto, req?.user?.id);
+    return await this.wordService.update(id, wordDto, req?.user?.id);
   }
 
   @Get(':id')

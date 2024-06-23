@@ -69,12 +69,12 @@ export default function AddSentence({onHide}: any) {
             popupType={popupTypes.addSentence}
         >
             <>
-                <Input
+                <Textarea
                     label="Sentence"
                     value={result.sentence}
                     onValueChange={(value: any) => setResult({...result, 'sentence': value})}
                 />
-                <Input
+                <Textarea
                     label="Translation"
                     value={result.translation}
                     onValueChange={(value: any) => setResult({...result, 'translation': value})}

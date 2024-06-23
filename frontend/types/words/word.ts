@@ -5,6 +5,7 @@ export enum WordFields {
     pluses = 'pluses',
     minuses = 'minuses',
     status = 'status',
+    learnCount = 'learnCount',
     lastStatusDate = 'lastStatusDate',
     comment = 'comment',
     userId = 'userId',
@@ -17,6 +18,7 @@ export interface WordInterface {
     [WordFields.pluses]: number;
     [WordFields.minuses]: number;
     [WordFields.status]: WordStatuses;
+    [WordFields.learnCount]: number;
     [WordFields.lastStatusDate]: string;
     [WordFields.comment]: string;
     [WordFields.userId]: number;
@@ -28,10 +30,5 @@ export enum WordStatuses {
     'NewWord',
     'Learning',
     'Learned',
-    'RepeatingMouth',
-    'RepeatedMount',
-    'RepeatingSixMouth',
-    'RepeatedSixMount',
-    'RepeatingYear',
-    'RepeatedYear',
+    'NeedToRepeat',
 }

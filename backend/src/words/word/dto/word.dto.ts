@@ -15,6 +15,8 @@ export class WordDto implements WordInterface {
   @ApiProperty()
   readonly status: number;
   @ApiProperty()
+  readonly learnCount: number;
+  @ApiProperty()
   readonly lastStatusDate: string;
   @ApiProperty()
   readonly comment: string;

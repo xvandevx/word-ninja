@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sentence } from './sentence.model';
-import { SentenceDto } from './dto/sentence.dto';
 import {Category} from "../../category/category.model";
+import {WordStatuses} from "../../../types/words/word";
 
 @Injectable()
 export class SentenceService {
@@ -15,6 +15,10 @@ export class SentenceService {
       isActive: true,
       sentence: dto.sentence,
       translation: dto.translation,
+      pluses: 0,
+      minuses: 0,
+      status: dto.status,
+      learnCount: 0,
       comment: dto.comment,
       userId
     });
@@ -34,6 +38,8 @@ export class SentenceService {
         sentence: dto.sentence,
         translation: dto.translation,
         comment: dto.comment,
+        status: dto.status,
+        learnCount: dto.learnCount,
       });
       if (dto.categorys) {
         await sentence.$set(
@@ -41,6 +47,40 @@ export class SentenceService {
             dto.categorys.split(',').map((id) => Number(id)),
         );
       }
+    }
+  }
+
+  async setMinus(id: number, userId) {
+    const sentence = await this.sentenceRepository.findByPk(id);
+    if (sentence.dataValues.userId === userId) {
+      await sentence.update({
+        minuses: sentence.dataValues.minuses + 1,
+      });
+    }
+  }
+
+  async setPlus(id: number, userId) {
+    const sentence = await this.sentenceRepository.findByPk(id);
+    if (sentence.dataValues.userId === userId) {
+      await sentence.update({
+        pluses: sentence.dataValues.pluses + 1,
+      });
+    }
+  }
+
+  async setStatus(id: number, dto,  userId) {
+    const sentence = await this.sentenceRepository.findByPk(id);
+    if (sentence.dataValues.userId === userId) {
+      const updateData: any  = {
+        status: +dto.status,
+      }
+      if (dto.status == WordStatuses.Learned) {
+        //const date = new Date();
+        updateData.lastStatusDate = new Date().toISOString();
+        //updateData.lastStatusDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+        updateData.learnCount = +sentence.dataValues.learnCount + 1;
+      }
+      await sentence.update(updateData);
     }
   }
 
